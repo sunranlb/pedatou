@@ -16,13 +16,15 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sr.pedatou.R;
 import com.sr.pedatou.dao.NoteDAO;
 import com.sr.pedatou.service.AlarmService;
 import com.sr.pedatou.util.Note;
+import com.sr.pedatou.util.Tools;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,32 +44,6 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
     private RVAdapter rvAdapter;
     private NoteDAO dao;
     private MyLinearLayoutManager layoutManager;
-
-    // XXX
-    public static String transDB2RV(String s) {
-        if (s.length() != 12)
-            return new String();
-
-        String month;
-        if (s.charAt(4) == '0')
-            month = s.substring(5, 6);
-        else
-            month = s.substring(4, 6);
-        month = Integer.parseInt(month) + 1 + "";
-
-        String day;
-        if (s.charAt(6) == '0')
-            day = s.substring(7, 8);
-        else
-            day = s.substring(6, 8);
-
-        String hour = s.substring(8, 10);
-
-        String min = s.substring(10, 12);
-
-        return month + "/" + day + " " + hour + ":" + min;
-
-    }
 
 
     @Override
@@ -132,25 +108,15 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
         toolbar.setTranslationY(-actionbarSize);
         toolbarTitle.setTranslationY(-actionbarSize);
         toolbarAddBtn.setTranslationY(-actionbarSize);
-        toolbar.animate()
-                .translationY(0)
-                .setDuration(600)
-                .setStartDelay(0);
-        toolbarTitle.animate()
-                .translationY(0)
-                .setDuration(300)
-                .setStartDelay(300);
-        toolbarAddBtn.animate()
-                .translationY(0)
-                .setDuration(300)
-                .setStartDelay(600)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        refreshFromDB();
-                    }
-                })
-                .start();
+        toolbar.animate().translationY(0).setDuration(600).setStartDelay(0);
+        toolbarTitle.animate().translationY(0).setDuration(300).setStartDelay(300);
+        toolbarAddBtn.animate().translationY(0).setDuration(300).setStartDelay(600).setListener
+                (new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                initRV();
+            }
+        }).start();
     }
 
     private void initToolbar() {
@@ -167,8 +133,7 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
                 break;
             }
         }
-        if (i != s)
-            rvAdapter.changeOneNoteContent(i, tmp.get(i).getContent());
+        if (i != s) rvAdapter.changeOneNoteContent(i, tmp.get(i).getContent());
     }
 
     private void addNewFromDB() {
@@ -176,21 +141,33 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
         List<Note> adapterDataList = rvAdapter.getDataList();
         int i = 0, s = adapterDataList.size();
         for (; i < s; ++i) {
-            if (!(tmp.get(i).getTime().equals(adapterDataList.get(i).getTime())))
-                break;
+            if (!(tmp.get(i).getTime().equals(adapterDataList.get(i).getTime()))) break;
         }
         rvAdapter.add(i, tmp.get(i));
     }
 
-    private void refreshFromDB() {
+    private int getTodayPosition(List<Note> dataList) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        int listSize = dataList.size();
+        int i = 0;
+        for (; i < listSize; ++i) {
+            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
+            if (t.compareTo(cal) >= 0) break;
+        }
+        return i;
+    }
+    private void initRV() {
         List<Note> dataList = dao.findAll();
+        int todayPosition = getTodayPosition(dataList);
+//        System.out.println("" + todayPosition);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
         rvAdapter = new RVAdapter(typeface);
         rvAdapter.setOnRecyclerViewListener(this);
         rv.setAdapter(rvAdapter);
         rvAdapter.addList(dataList);
         rv.setItemAnimator(new MyItemAnimator());
-
+        rv.scrollToPosition(todayPosition);
     }
 
     @Override
@@ -203,19 +180,15 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
 
     @Override
     public boolean onItemLongClick(final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(
-                MainActivity.this);
-        builder.setTitle("Delete It???").setNegativeButton("CANCEL",
-                null);
-        builder.setPositiveButton("OK",
-                new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Delete It???").setNegativeButton("CANCEL", null);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
-                    public void onClick(DialogInterface dialog,
-                                        int which) {
-                        dao.detele(rvAdapter.getDataList().get(position).getId());
-                        rvAdapter.remove(position);
-                    }
-                });
+            public void onClick(DialogInterface dialog, int which) {
+                dao.detele(rvAdapter.getDataList().get(position).getId());
+                rvAdapter.remove(position);
+            }
+        });
         builder.show();
         return true;
     }

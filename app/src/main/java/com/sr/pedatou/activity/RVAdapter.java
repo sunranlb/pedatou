@@ -16,6 +16,8 @@ import com.sr.pedatou.util.Note;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sr.pedatou.util.Tools.transDB2RV;
+
 /**
  * Created by SR on 2016/7/24.
  */
@@ -103,11 +105,11 @@ public class RVAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
 //        System.out.println("onBind");
-        runEnterAnimation(viewHolder.itemView, i);
+//        runEnterAnimation(viewHolder.itemView, i);
         NoteViewHolder holder = (NoteViewHolder) viewHolder;
         Note n = list.get(i);
         holder.time.setTypeface(typeface);
-        holder.time.setText(MainActivity.transDB2RV(n.getTime()));
+        holder.time.setText(transDB2RV(n.getTime()));
         holder.content.setTypeface(typeface);
         holder.content.setText(n.getContent());
     }

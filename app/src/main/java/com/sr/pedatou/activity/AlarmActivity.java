@@ -25,6 +25,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.sr.pedatou.util.Tools.transDB2RV;
+
 public class AlarmActivity extends Activity implements View.OnClickListener {
 
     @BindView(R.id.al_title)
@@ -85,10 +87,10 @@ public class AlarmActivity extends Activity implements View.OnClickListener {
         id = intent.getIntExtra("id", 0);
         System.out.println("AlarmA:id = " + id + ",time = " + time + ", c = "
                 + content);
-        titleTV.setText(MainActivity.transDB2RV(time));
+        titleTV.setText(transDB2RV(time));
         contentTV.setText(content);
 
-        setNotification(MainActivity.transDB2RV(time), content, id);
+        setNotification(transDB2RV(time), content, id);
 
     }
 

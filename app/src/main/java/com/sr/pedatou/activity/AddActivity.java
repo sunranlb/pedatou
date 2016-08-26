@@ -54,6 +54,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.sr.pedatou.util.Tools.transDB2RV;
+
 public class AddActivity extends AppCompatActivity {
     private static final String TAG = "AddActivity";
     private static int screenWidth = 0, screenHeight = 0;
@@ -324,7 +326,7 @@ public class AddActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("There is something at this time. Update it???")
                 .setMessage(
-                        "Time:" + MainActivity.transDB2RV(time)
+                        "Time:" + transDB2RV(time)
                                 + "\nContent:" + noteToUpdate.getContent())
                 .setNegativeButton("CANCEL", null);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
