@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activity.AddActivity"
+    tools:showIn="@layout/activity_add"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/add_rlDTPicker"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/activity_margin"
+        android:layout_marginRight="@dimen/activity_margin"
+        android:layout_marginTop="8dp"
+        android:gravity="center">
+
+        <DatePicker
+            android:id="@+id/add_datePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:calendarViewShown="false" />
+
+        <TimePicker
+            android:id="@+id/add_timePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/add_datePicker" />
+    </RelativeLayout>
+
+    <GridLayout
+        android:id="@+id/add_gl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_rlDTPicker"
+        android:layout_marginLeft="@dimen/activity_margin"
+        android:layout_marginRight="@dimen/activity_margin"
+        android:columnCount="4"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/add_gl_addBtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/btn_add256" />
+    </GridLayout>
+
+    <FrameLayout
+        android:id="@+id/add_flRC"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"></FrameLayout>
+
+
+    <EditText
+        android:id="@+id/add_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/add_gl"
+        android:layout_marginLeft="@dimen/activity_margin"
+        android:layout_marginRight="@dimen/activity_margin"
+        android:hint="content"
+        android:textSize="30sp" />
+
+    <FrameLayout
+        android:id="@+id/add_flClearBtn"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/add_gl"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/add_clear_text"
+            android:layout_width="40sp"
+            android:layout_height="40sp"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/activity_margin"
+            android:layout_marginTop="@dimen/activity_margin"
+            android:background="@drawable/black_corss" />
+    </FrameLayout>
+
+</RelativeLayout>

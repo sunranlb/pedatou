@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.sr.pedatou.activity.AddActivity">
+    <item
+        android:icon="@drawable/check"
+        android:actionLayout="@layout/design_navigation_item"
+        android:title="@string/action_ok"
+        app:showAsAction="ifRoom" />
+</menu>

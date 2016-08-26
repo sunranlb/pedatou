@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:theme="@style/dialog">
+
+    <TextView
+        android:id="@+id/al_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/test_word"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/al_context"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/test_word"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/al_btn_row1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/ad_btn_2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="2m" />
+
+        <Button
+            android:id="@+id/ad_btn_5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="5m" />
+
+        <Button
+            android:id="@+id/ad_btn_10"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="10m" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/al_btn_row2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-10dp">
+
+        <Button
+            android:id="@+id/ad_btn_30"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="30m" />
+
+        <Button
+            android:id="@+id/ad_btn_1h"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="1h" />
+
+        <Button
+            android:id="@+id/ad_btn_ok"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="OK" />
+    </LinearLayout>
+
+</LinearLayout>
