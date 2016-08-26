@@ -11,6 +11,7 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,7 +30,9 @@ import com.sr.pedatou.util.Tools;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
     private MyLinearLayoutManager layoutManager;
     private static boolean isBindService = false;
     private AlarmService alarmService;
+    private List<List<Note>> mGroupList = null;
+    private Map<Integer, String> mHeaderMap = new ArrayMap<Integer, String>();
 
     private ServiceConnection alarmServiceConnection = new ServiceConnection() {
         @Override
@@ -177,28 +182,85 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
         rvAdapter.add(i, tmp.get(i));
     }
 
-    private int getTodayPosition(List<Note> dataList) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-        int listSize = dataList.size();
-        int i = 0;
-        for (; i < listSize; ++i) {
-            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
-            if (t.compareTo(cal) >= 0) break;
-        }
-        return i;
-    }
     private void initRV() {
         List<Note> dataList = dao.findAll();
-        int todayPosition = getTodayPosition(dataList);
-//        System.out.println("" + todayPosition);
         Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
+        mGroupList = new LinkedList<List<Note>>();
+        mHeaderMap = new ArrayMap<Integer, String>();
+        initGroupListAndHeaderMap(dataList);
+
+        for(int i=0;i<mGroupList.size();++i) {
+            System.out.println(mHeaderMap.get(i));
+            System.out.println(mGroupList.get(i));
+        }
         rvAdapter = new RVAdapter(typeface);
         rvAdapter.setOnRecyclerViewListener(this);
         rv.setAdapter(rvAdapter);
         rvAdapter.addList(dataList);
         rv.setItemAnimator(new MyItemAnimator());
-        rv.scrollToPosition(todayPosition);
+    }
+
+    private void initGroupListAndHeaderMap(List<Note> dataList) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+
+        mHeaderMap.put(0, "History");
+        mHeaderMap.put(1, "Today");
+        mHeaderMap.put(2, "Tomorrow");
+        mHeaderMap.put(3, "Within One Week");
+        mHeaderMap.put(4, "Within Two Weeks");
+        mHeaderMap.put(5, "Farther Future");
+
+        int listSize = dataList.size();
+        int i = 0;
+        List<Note> historyList = new ArrayList<Note>();
+        List<Note> todayList = new ArrayList<Note>();
+        List<Note> tomorrowList = new ArrayList<Note>();
+        List<Note> oneweekList = new ArrayList<Note>();
+        List<Note> twoweekList = new ArrayList<Note>();
+        List<Note> fartherfutureList = new ArrayList<Note>();
+        for (; i < listSize; ++i) {
+            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
+            if (t.compareTo(cal) >= 0) break;
+            historyList.add(dataList.get(i));
+        }
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        for (; i < listSize; ++i) {
+            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
+            if (t.compareTo(cal) >= 0) break;
+            todayList.add(dataList.get(i));
+        }
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        for (; i < listSize; ++i) {
+            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
+            if (t.compareTo(cal) >= 0) break;
+            tomorrowList.add(dataList.get(i));
+        }
+        cal.add(Calendar.DAY_OF_MONTH, 5);
+        for (; i < listSize; ++i) {
+            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
+            if (t.compareTo(cal) >= 0) break;
+            oneweekList.add(dataList.get(i));
+        }
+        cal.add(Calendar.DAY_OF_MONTH, 7);
+        for (; i < listSize; ++i) {
+            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
+            if (t.compareTo(cal) >= 0) break;
+            twoweekList.add(dataList.get(i));
+        }
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        for (; i < listSize; ++i) {
+            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
+            if (t.compareTo(cal) >= 0) break;
+            fartherfutureList.add(dataList.get(i));
+        }
+        mGroupList.add(historyList);
+        mGroupList.add(todayList);
+        mGroupList.add(tomorrowList);
+        mGroupList.add(oneweekList);
+        mGroupList.add(twoweekList);
+        mGroupList.add(fartherfutureList);
+
     }
 
     @Override
