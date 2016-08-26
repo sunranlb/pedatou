@@ -179,23 +179,23 @@ public class AddActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        System.out.println("AddA onStart!");
+//        System.out.println("AddA onStart!");
         if (!isBindService) {
             Intent i = new Intent(AddActivity.this, AlarmService.class);
             bindService(i, alarmServiceConnection, Context.BIND_AUTO_CREATE);
             isBindService = true;
-            System.out.println("AddA onStart:isBindService = " + isBindService);
+//            System.out.println("AddA onStart:isBindService = " + isBindService);
         }
         super.onStart();
     }
 
     @Override
     protected void onStop() {
-        System.out.println("AddA onStop!");
+//        System.out.println("AddA onStop!");
         if (isBindService) {
             unbindService(alarmServiceConnection);
             isBindService = false;
-            System.out.println("AddA onStop:isBind = " + isBindService);
+//            System.out.println("AddA onStop:isBind = " + isBindService);
         }
         super.onStop();
     }
@@ -253,7 +253,10 @@ public class AddActivity extends AppCompatActivity {
 
     private void setAlarm(Note n) {
         alarmService.setAlarm(year, month, day, hour, min, n);
+    }
 
+    private void deleteAlarm(Note n) {
+        alarmService.deleteAlarm(n);
     }
 
     /*
@@ -274,6 +277,7 @@ public class AddActivity extends AppCompatActivity {
             dao.detele(noteToChange.getId());
             it.putExtra("needRefreshLV", "3");
             it.putExtra("toDelete", "" + noteToChange.getId());
+            deleteAlarm(noteToChange);
         } else {
             it.putExtra("needRefreshLV", "2");
         }
@@ -297,6 +301,7 @@ public class AddActivity extends AppCompatActivity {
             dao.detele(noteToChange.getId());
             it.putExtra("needRefreshLV", "4");
             it.putExtra("toDelete", "" + noteToChange.getId());
+            deleteAlarm(noteToChange);
         } else {
             it.putExtra("needRefreshLV", "1");
         }
@@ -440,7 +445,7 @@ public class AddActivity extends AppCompatActivity {
                 getTime();
                 String transTime = transTime2DB();
                 if (isToChangeNote) { //用户点击RV项进入的AddActivity
-                    if (noteToChange.getTime().equals(transTime)) { //用户并没有修改时间
+                    if (noteToChange.getTime().equals(transTime)) { //用户并没有修改时间，只修改了内容
                         changeContentAndFinish(transTime);
                     } else { //用户修改了时间
                         if (dao.findByTime(transTime) != null) {

@@ -136,6 +136,20 @@ public class AlarmService extends Service {
         alm.set(AlarmManager.RTC_WAKEUP, c2.getTimeInMillis(), pi);
     }
 
+    public void deleteAlarm(Note n) {
+        System.out.println("Service.deleteAlarm : id = " + n.getId());
+        Intent i = new Intent();
+        i.setClass(this, AlarmReceiver.class);
+        i.setAction("com.sr.pedatou.ACTION_SET_ALARM");
+        i.putExtra("messageTitle", n.getTime());
+        i.putExtra("messageContent", n.getContent());
+        i.putExtra("id", n.getId());
+        pi = PendingIntent.getBroadcast(this, n.getId(), i,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        alm = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alm.cancel(pi);
+    }
+
     public void setDelayAlarm(int delayMin, Note n) {
         Calendar c = Calendar.getInstance();
         long delayMillis = delayMin * 60000l;

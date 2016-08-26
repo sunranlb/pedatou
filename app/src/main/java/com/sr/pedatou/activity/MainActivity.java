@@ -2,11 +2,15 @@ package com.sr.pedatou.activity;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,10 +48,32 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
     private RVAdapter rvAdapter;
     private NoteDAO dao;
     private MyLinearLayoutManager layoutManager;
+    private static boolean isBindService = false;
+    private AlarmService alarmService;
+
+    private ServiceConnection alarmServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            AlarmService.AlarmBinder b = (AlarmService.AlarmBinder) service;
+            alarmService = b.getService();
+            isBindService = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+//            System.out.println("AddA onServiceDisconnected!");
+            isBindService = false;
+        }
+    };
 
 
     @Override
     public void onStop() {
+        if (isBindService) {
+            unbindService(alarmServiceConnection);
+            isBindService = false;
+//            System.out.println("AddA onStop:isBind = " + isBindService);
+        }
         super.onStop();
     }
 
@@ -69,6 +95,11 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
     @Override
     protected void onStart() {
         startService(new Intent(MainActivity.this, AlarmService.class));
+        if (!isBindService) {
+            Intent i = new Intent(MainActivity.this, AlarmService.class);
+            bindService(i, alarmServiceConnection, Context.BIND_AUTO_CREATE);
+            isBindService = true;
+        }
         super.onStart();
     }
 
@@ -185,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
+                alarmService.deleteAlarm(rvAdapter.getDataList().get(position));
                 dao.detele(rvAdapter.getDataList().get(position).getId());
                 rvAdapter.remove(position);
             }
