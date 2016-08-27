@@ -1,4 +1,4 @@
-package com.sr.pedatou.activity;
+package com.sr.pedatou.others;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;

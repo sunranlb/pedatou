@@ -23,7 +23,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.sr.pedatou.R;
+import com.sr.pedatou.adapter.HeaderAdapterOption;
+import com.sr.pedatou.adapter.HeaderRecycleAdapter;
+import com.sr.pedatou.adapter.RVAdapter;
 import com.sr.pedatou.dao.NoteDAO;
+import com.sr.pedatou.others.MyItemAnimator;
+import com.sr.pedatou.others.MyLinearLayoutManager;
+import com.sr.pedatou.others.StickHeaderItemDecoration;
 import com.sr.pedatou.service.AlarmService;
 import com.sr.pedatou.util.Note;
 import com.sr.pedatou.util.Tools;
@@ -40,6 +46,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyclerViewListener {
     static final public String TAG = "MA";
+    private static boolean isBindService = false;
     @BindView(R.id.rv)
     RecyclerView rv;
     @BindView(R.id.main_activity_toolbar)
@@ -48,14 +55,14 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
     TextView toolbarTitle;
     @BindView(R.id.toolbar_add_btn)
     ImageButton toolbarAddBtn;
+    HeaderRecycleAdapter mColorAdapter = null;
+    StickHeaderItemDecoration mStickDecoration = null;
     private RVAdapter rvAdapter;
     private NoteDAO dao;
     private MyLinearLayoutManager layoutManager;
-    private static boolean isBindService = false;
     private AlarmService alarmService;
     private List<List<Note>> mGroupList = null;
     private Map<Integer, String> mHeaderMap = new ArrayMap<Integer, String>();
-
     private ServiceConnection alarmServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -90,9 +97,7 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
         initToolbar();
         dao = new NoteDAO(MainActivity.this);
 
-        layoutManager = new MyLinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rv.setLayoutManager(layoutManager);
+
         startIntroAnimation();
 
     }
@@ -189,20 +194,32 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
         mHeaderMap = new ArrayMap<Integer, String>();
         initGroupListAndHeaderMap(dataList);
 
-        for(int i=0;i<mGroupList.size();++i) {
+        for (int i = 0; i < mGroupList.size(); ++i) {
             System.out.println(mHeaderMap.get(i));
             System.out.println(mGroupList.get(i));
         }
-        rvAdapter = new RVAdapter(typeface);
-        rvAdapter.setOnRecyclerViewListener(this);
-        rv.setAdapter(rvAdapter);
-        rvAdapter.addList(dataList);
+
+        mColorAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
+                (false, true), mGroupList, mHeaderMap);
+//        rvAdapter = new RVAdapter(typeface);
+        layoutManager = new MyLinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rv.setLayoutManager(layoutManager);
+        rv.setAdapter(mColorAdapter);
+        mStickDecoration = new StickHeaderItemDecoration(mColorAdapter);
+        rv.addItemDecoration(mStickDecoration);
+
+//        rvAdapter.setOnRecyclerViewListener(this);
+//        rv.setAdapter(rvAdapter);
+//        rvAdapter.addList(dataList);
+
         rv.setItemAnimator(new MyItemAnimator());
     }
 
     private void initGroupListAndHeaderMap(List<Note> dataList) {
         Calendar cal = Calendar.getInstance();
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
+                0, 0, 0);
 
         mHeaderMap.put(0, "History");
         mHeaderMap.put(1, "Today");

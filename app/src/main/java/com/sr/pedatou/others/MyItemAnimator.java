@@ -1,4 +1,4 @@
-package com.sr.pedatou.activity;
+package com.sr.pedatou.others;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
+
+import com.sr.pedatou.adapter.RVAdapter;
 
 import java.util.List;
 

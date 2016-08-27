@@ -1,4 +1,4 @@
-package com.sr.pedatou.activity;
+package com.sr.pedatou.adapter;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -152,8 +152,8 @@ public class RVAdapter extends RecyclerView.Adapter {
 
         public NoteViewHolder(View itemView) {
             super(itemView);
-            time = (TextView) itemView.findViewById(R.id.tv1);
-            content = (TextView) itemView.findViewById(R.id.tv2);
+            time = (TextView) itemView.findViewById(R.id.list_item_time);
+            content = (TextView) itemView.findViewById(R.id.list_item_content);
             rootView = itemView.findViewById(R.id.list_item);
             rootView.setOnClickListener(this);
             rootView.setOnLongClickListener(this);
