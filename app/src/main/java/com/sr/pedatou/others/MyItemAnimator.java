@@ -48,8 +48,8 @@ public class MyItemAnimator extends DefaultItemAnimator {
 
     @NonNull
     private ItemHolderInfo getItemHolderInfo(HeaderRecycleViewHolder viewHolder, NoteInfo info) {
-        info.time = (TextView)(viewHolder.getView(R.id.list_item_time)).agetText().toString();
-        info.content = viewHolder.content.getText().toString();
+        info.time = viewHolder.getmTime().getText().toString();
+        info.content = viewHolder.getmContent().getText().toString();
         return info;
     }
 
@@ -59,7 +59,7 @@ public class MyItemAnimator extends DefaultItemAnimator {
                                                      RecyclerView.ViewHolder viewHolder, int changeFlags, List<Object> payloads) {
         NoteInfo info = (NoteInfo) super.recordPreLayoutInformation(state, viewHolder,
                 changeFlags, payloads);
-        return getItemHolderInfo((RVAdapter.NoteViewHolder) viewHolder, info);
+        return getItemHolderInfo((HeaderRecycleViewHolder) viewHolder, info);
     }
 
     @NonNull
@@ -67,7 +67,7 @@ public class MyItemAnimator extends DefaultItemAnimator {
     public ItemHolderInfo recordPostLayoutInformation(@NonNull RecyclerView.State state,
                                                       @NonNull RecyclerView.ViewHolder viewHolder) {
         NoteInfo info = (NoteInfo) super.recordPostLayoutInformation(state, viewHolder);
-        return getItemHolderInfo((RVAdapter.NoteViewHolder) viewHolder, info);
+        return getItemHolderInfo((HeaderRecycleViewHolder) viewHolder, info);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class MyItemAnimator extends DefaultItemAnimator {
             return super.animateChange(oldHolder, newHolder, preInfo, postInfo);
         }
 
-        final RVAdapter.NoteViewHolder viewHolder = (RVAdapter.NoteViewHolder) newHolder;
+        final HeaderRecycleViewHolder viewHolder = (HeaderRecycleViewHolder) newHolder;
 
         // Get the pre/post change values; these are what we are animating between
         NoteInfo oldInfo = (NoteInfo) preInfo;
@@ -103,8 +103,8 @@ public class MyItemAnimator extends DefaultItemAnimator {
         final String newContent = newInfo.content;
 
         // These are the objects whose values will be animated
-        final TextView newTimeTextView = viewHolder.time;
-        final TextView newContentTextView = viewHolder.content;
+        final TextView newTimeTextView = viewHolder.getmTime();
+        final TextView newContentTextView = viewHolder.getmContent();
 
         // Check to see if there's a change animation already running on this item
         AnimatorInfo runningInfo = mAnimatorMap.get(newHolder);

@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Map;
-
+import com.sr.pedatou.R;
 /**
  * Created by taro on 16/4/19.
  */
@@ -21,6 +21,8 @@ public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements 
     private int mGroupId = -1;
     private int mChildId = -1;
     private View mRootView;
+    private TextView mTime;
+    private TextView mContent;
     private OnItemClickListener mRootViewClickListener = null;
     //当前项是否可以响应单击事件
     private boolean mIsClickEnabled = true;
@@ -39,6 +41,8 @@ public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements 
     public HeaderRecycleViewHolder(HeaderRecycleAdapter adapter, View itemView) {
         super(itemView);
         mRootView = itemView;
+        mTime = (TextView) itemView.findViewById(R.id.list_item_time);
+        mContent = (TextView) itemView.findViewById(R.id.list_item_content);
         mParentAdapter = adapter;
         mViewHolder = new ArrayMap<Integer, View>();
     }
@@ -256,6 +260,12 @@ public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements 
         return mRootView;
     }
 
+    public TextView getmTime() {
+        return mTime;
+    }
+    public TextView getmContent() {
+        return mContent;
+    }
     /**
      * 获取父adapter
      *
