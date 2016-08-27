@@ -12,8 +12,13 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
+import com.sr.pedatou.R;
 
-import com.sr.pedatou.adapter.RVAdapter;
+//import com.sr.pedatou.adapter.RVAdapter;
+
+import com.sr.pedatou.adapter.HeaderRecycleViewHolder;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -42,8 +47,8 @@ public class MyItemAnimator extends DefaultItemAnimator {
     }
 
     @NonNull
-    private ItemHolderInfo getItemHolderInfo(RVAdapter.NoteViewHolder viewHolder, NoteInfo info) {
-        info.time = viewHolder.time.getText().toString();
+    private ItemHolderInfo getItemHolderInfo(HeaderRecycleViewHolder viewHolder, NoteInfo info) {
+        info.time = (TextView)(viewHolder.getView(R.id.list_item_time)).agetText().toString();
         info.content = viewHolder.content.getText().toString();
         return info;
     }

@@ -25,7 +25,7 @@ import android.widget.TextView;
 import com.sr.pedatou.R;
 import com.sr.pedatou.adapter.HeaderAdapterOption;
 import com.sr.pedatou.adapter.HeaderRecycleAdapter;
-import com.sr.pedatou.adapter.RVAdapter;
+//import com.sr.pedatou.adapter.RVAdapter;
 import com.sr.pedatou.dao.NoteDAO;
 import com.sr.pedatou.others.MyItemAnimator;
 import com.sr.pedatou.others.MyLinearLayoutManager;
@@ -44,7 +44,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyclerViewListener {
+public class MainActivity extends AppCompatActivity {
     static final public String TAG = "MA";
     private static boolean isBindService = false;
     @BindView(R.id.rv)
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
     ImageButton toolbarAddBtn;
     HeaderRecycleAdapter mColorAdapter = null;
     StickHeaderItemDecoration mStickDecoration = null;
-    private RVAdapter rvAdapter;
+//    private RVAdapter rvAdapter;
     private NoteDAO dao;
     private MyLinearLayoutManager layoutManager;
     private AlarmService alarmService;
@@ -128,17 +128,17 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
         String str = bundle.getString("needRefreshLV");
         if (str != null) {
             if (str.equals("1")) { // added
-                addNewFromDB();
+//                addNewFromDB();
             } else if (str.equals("2")) { //change one content
-                changeOneNoteContent();
+//                changeOneNoteContent();
             } else if (str.equals("3")) { //change content but has the same time
                 int toDeleteId = Integer.parseInt(bundle.getString("toDelete"));
-                rvAdapter.removeById(toDeleteId);
-                changeOneNoteContent();
+//                rvAdapter.removeById(toDeleteId);
+//                changeOneNoteContent();
             } else if (str.equals("4")) { // change content but has new time
                 int toDeleteId = Integer.parseInt(bundle.getString("toDelete"));
-                rvAdapter.removeById(toDeleteId);
-                addNewFromDB();
+//                rvAdapter.removeById(toDeleteId);
+//                addNewFromDB();
             }
         }
     }
@@ -165,27 +165,27 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
         setSupportActionBar(toolbar);
     }
 
-    private void changeOneNoteContent() {
-        List<Note> tmp = dao.findAll();
-        List<Note> adapterDataList = rvAdapter.getDataList();
-        int i = 0, s = adapterDataList.size();
-        for (; i < s; ++i) {
-            if (!tmp.get(i).getContent().equals(adapterDataList.get(i).getContent())) {
-                break;
-            }
-        }
-        if (i != s) rvAdapter.changeOneNoteContent(i, tmp.get(i).getContent());
-    }
+//    private void changeOneNoteContent() {
+//        List<Note> tmp = dao.findAll();
+//        List<Note> adapterDataList = rvAdapter.getDataList();
+//        int i = 0, s = adapterDataList.size();
+//        for (; i < s; ++i) {
+//            if (!tmp.get(i).getContent().equals(adapterDataList.get(i).getContent())) {
+//                break;
+//            }
+//        }
+//        if (i != s) rvAdapter.changeOneNoteContent(i, tmp.get(i).getContent());
+//    }
 
-    private void addNewFromDB() {
-        List<Note> tmp = dao.findAll();
-        List<Note> adapterDataList = rvAdapter.getDataList();
-        int i = 0, s = adapterDataList.size();
-        for (; i < s; ++i) {
-            if (!(tmp.get(i).getTime().equals(adapterDataList.get(i).getTime()))) break;
-        }
-        rvAdapter.add(i, tmp.get(i));
-    }
+//    private void addNewFromDB() {
+//        List<Note> tmp = dao.findAll();
+//        List<Note> adapterDataList = rvAdapter.getDataList();
+//        int i = 0, s = adapterDataList.size();
+//        for (; i < s; ++i) {
+//            if (!(tmp.get(i).getTime().equals(adapterDataList.get(i).getTime()))) break;
+//        }
+//        rvAdapter.add(i, tmp.get(i));
+//    }
 
     private void initRV() {
         List<Note> dataList = dao.findAll();
@@ -280,29 +280,29 @@ public class MainActivity extends AppCompatActivity implements RVAdapter.OnRecyc
 
     }
 
-    @Override
-    public void onItemClick(int position) {
-        Intent i = new Intent();
-        i.setClass(MainActivity.this, AddActivity.class);
-        i.putExtra("id", rvAdapter.getItem(position).getId());
-        startActivityForResult(i, BIND_AUTO_CREATE);
-    }
-
-    @Override
-    public boolean onItemLongClick(final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Delete It???").setNegativeButton("CANCEL", null);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-                alarmService.deleteAlarm(rvAdapter.getDataList().get(position));
-                dao.detele(rvAdapter.getDataList().get(position).getId());
-                rvAdapter.remove(position);
-            }
-        });
-        builder.show();
-        return true;
-    }
+//    @Override
+//    public void onItemClick(int position) {
+//        Intent i = new Intent();
+//        i.setClass(MainActivity.this, AddActivity.class);
+//        i.putExtra("id", rvAdapter.getItem(position).getId());
+//        startActivityForResult(i, BIND_AUTO_CREATE);
+//    }
+//
+//    @Override
+//    public boolean onItemLongClick(final int position) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//        builder.setTitle("Delete It???").setNegativeButton("CANCEL", null);
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//
+//            public void onClick(DialogInterface dialog, int which) {
+//                alarmService.deleteAlarm(rvAdapter.getDataList().get(position));
+//                dao.detele(rvAdapter.getDataList().get(position).getId());
+//                rvAdapter.remove(position);
+//            }
+//        });
+//        builder.show();
+//        return true;
+//    }
 
     @OnClick({R.id.toolbar_add_btn})
     public void onClick(View view) {
