@@ -26,6 +26,7 @@ import com.sr.pedatou.R;
 import com.sr.pedatou.adapter.HeaderAdapterOption;
 import com.sr.pedatou.adapter.HeaderRecycleAdapter;
 //import com.sr.pedatou.adapter.RVAdapter;
+import com.sr.pedatou.adapter.RVAdapter;
 import com.sr.pedatou.dao.NoteDAO;
 import com.sr.pedatou.others.MyItemAnimator;
 import com.sr.pedatou.others.MyLinearLayoutManager;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton toolbarAddBtn;
     HeaderRecycleAdapter mColorAdapter = null;
     StickHeaderItemDecoration mStickDecoration = null;
-//    private RVAdapter rvAdapter;
+    private RVAdapter rvAdapter;
     private NoteDAO dao;
     private MyLinearLayoutManager layoutManager;
     private AlarmService alarmService;
