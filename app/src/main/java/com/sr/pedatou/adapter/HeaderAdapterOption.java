@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.sr.pedatou.R;
 import com.sr.pedatou.util.Note;
+import com.sr.pedatou.util.Tools;
 
 /**
  * Created by taro on 16/6/22.
@@ -93,7 +94,7 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
         }
         if (tv_time != null) {
             tv_time.setTypeface(t);
-            tv_time.setText(itemData.getTime());
+            tv_time.setText(Tools.transDB2RV(itemData.getTime()));
         }
 //        System.out.println(holder.getItemViewType());
 
