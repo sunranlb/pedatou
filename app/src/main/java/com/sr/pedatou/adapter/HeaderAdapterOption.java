@@ -1,6 +1,7 @@
 package com.sr.pedatou.adapter;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.widget.TextView;
 
 import com.sr.pedatou.R;
@@ -9,7 +10,8 @@ import com.sr.pedatou.util.Note;
 /**
  * Created by taro on 16/6/22.
  */
-public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterOption<Note, String> {
+public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterOption<Note,
+        String> {
     private boolean mIsMultiType = false;
     private boolean mIsSetBgColor = false;
 
@@ -36,8 +38,10 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
 
     // childId为-1~4的值（Y？）childId==-1的时候isHeaderItem==true
     @Override
-    public int getItemViewType(int position, int groupId, int childId, boolean isHeaderItem, boolean isShowHeader) {
-//        System.out.println("po:"+position+"gid:"+groupId+"chid"+childId+"isHI:"+isHeaderItem+"iSH:"+isShowHeader);
+    public int getItemViewType(int position, int groupId, int childId, boolean isHeaderItem,
+                               boolean isShowHeader) {
+//        System.out.println("po:"+position+"gid:"+groupId+"chid"+childId+"isHI:"+isHeaderItem
+// +"iSH:"+isShowHeader);
         if (isHeaderItem) {
             int ret = getHeaderViewType(groupId, position);
 //            System.out.println("ret:"+ret);
@@ -79,13 +83,16 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
     }
 
     @Override
-    public void setViewHolder(int groupId, int childId, int position, Note itemData, HeaderRecycleViewHolder holder) {
+    public void setViewHolder(int groupId, int childId, int position, Note itemData,
+                              HeaderRecycleViewHolder holder, Typeface t) {
         TextView tv_time = holder.getView(R.id.list_item_time);
         TextView tv_content = holder.getView(R.id.list_item_content);
         if (tv_content != null) {
+            tv_content.setTypeface(t);
             tv_content.setText(itemData.getContent());
         }
         if (tv_time != null) {
+            tv_time.setTypeface(t);
             tv_time.setText(itemData.getTime());
         }
 //        System.out.println(holder.getItemViewType());

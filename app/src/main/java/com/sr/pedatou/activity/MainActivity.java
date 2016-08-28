@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mColorAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
-                (false, true), mGroupList, mHeaderMap);
+                (false, true), mGroupList, mHeaderMap, typeface);
 //        rvAdapter = new RVAdapter(typeface);
         layoutManager = new MyLinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
