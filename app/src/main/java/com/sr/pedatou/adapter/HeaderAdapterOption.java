@@ -1,7 +1,7 @@
 package com.sr.pedatou.adapter;
 
-import android.graphics.Color;
 import android.graphics.Typeface;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.sr.pedatou.R;
@@ -74,10 +74,25 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
     @Override
     public void setHeaderHolder(int groupId, String header, HeaderRecycleViewHolder holder) {
         TextView tv_header = holder.getView(R.id.tv_header);
+        ImageView iv_header = holder.getView(R.id.line_header);
         if (tv_header != null) {
             tv_header.setText(header.toString());
         }
-
+        switch (groupId) {
+            case 0:
+                iv_header.setImageResource(R.drawable.header_line_history);break;
+            case 1:
+                iv_header.setImageResource(R.drawable.header_line_today);break;
+            case 2:
+                iv_header.setImageResource(R.drawable.header_line_tomorror);break;
+            case 3:
+                iv_header.setImageResource(R.drawable.header_line_within_one_week);break;
+            case 4:
+                iv_header.setImageResource(R.drawable.header_line_within_two_weeks);break;
+            case 5:
+                iv_header.setImageResource(R.drawable.header_line_farther_future);break;
+            default:
+        }
 //        if (mIsSetBgColor) {
 //            holder.getRootView().setBackgroundColor(Color.parseColor("#ff9900"));
 //        }
@@ -104,8 +119,7 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
 //            layout.setIsDrawableTest(true);
 //            layout.setButtomText("小洪是SB,哇咔哫");
 //        }
-//        if (mIsSetBgColor) {
-//            holder.getRootView().setBackgroundColor(Color.parseColor("#99cc99"));
-//        }
+        if (mIsSetBgColor) {
+        }
     }
 }

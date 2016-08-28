@@ -3,10 +3,11 @@
               android:layout_width="match_parent"
               android:layout_height="30dp">
     <ImageView
+        android:id="@+id/line_header"
         android:layout_width="match_parent"
         android:layout_height="30sp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/header_background"
+        android:src="@drawable/header_line_history"
         android:background="#ffffff"/>
 
     <TextView
