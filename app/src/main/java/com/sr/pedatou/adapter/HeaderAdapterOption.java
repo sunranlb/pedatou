@@ -1,5 +1,6 @@
 package com.sr.pedatou.adapter;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -86,11 +87,9 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
             case 2:
                 iv_header.setImageResource(R.drawable.header_line_tomorror);break;
             case 3:
-                iv_header.setImageResource(R.drawable.header_line_within_one_week);break;
             case 4:
-                iv_header.setImageResource(R.drawable.header_line_within_two_weeks);break;
             case 5:
-                iv_header.setImageResource(R.drawable.header_line_farther_future);break;
+                iv_header.setImageResource(R.drawable.header_line_within_one_week);break;
             default:
         }
 //        if (mIsSetBgColor) {
@@ -106,10 +105,15 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
         if (tv_content != null) {
             tv_content.setTypeface(t);
             tv_content.setText(itemData.getContent());
+            if (groupId == 0) tv_content.setTextColor(Color.GRAY);
+            else tv_content.setTextColor(Color.BLACK);
         }
+
         if (tv_time != null) {
             tv_time.setTypeface(t);
             tv_time.setText(Tools.transDB2RV(itemData.getTime()));
+            if (groupId == 0) tv_time.setTextColor(Color.GRAY);
+            else tv_time.setTextColor(Color.BLACK);
         }
 //        System.out.println(holder.getItemViewType());
 
