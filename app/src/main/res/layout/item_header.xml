@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-    <View
+              android:layout_height="30dp">
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="30sp"
         android:layout_gravity="center_vertical"
-        android:background="@color/header_today"/>
+        android:src="@drawable/header_background"
+        android:background="#ffffff"/>
 
     <TextView
         android:id="@+id/tv_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="#000000"
+        android:textColor="#616161"
         android:background="#ffffff"
         android:textSize="20sp"/>
 
