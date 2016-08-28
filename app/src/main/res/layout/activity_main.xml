@@ -40,8 +40,6 @@
         android:id="@+id/rv"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_margin"
-        android:layout_marginRight="@dimen/activity_margin"
         android:layout_below="@id/main_activity_toolbar"/>
 
 
