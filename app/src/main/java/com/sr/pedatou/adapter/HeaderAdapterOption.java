@@ -2,6 +2,7 @@ package com.sr.pedatou.adapter;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -87,9 +88,11 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
             case 2:
                 iv_header.setImageResource(R.drawable.header_line_tomorror);break;
             case 3:
-            case 4:
-            case 5:
                 iv_header.setImageResource(R.drawable.header_line_within_one_week);break;
+            case 4:
+                iv_header.setImageResource(R.drawable.header_line_within_two_weeks);break;
+            case 5:
+                iv_header.setImageResource(R.drawable.header_line_farther_future);break;
             default:
         }
 //        if (mIsSetBgColor) {
@@ -107,6 +110,17 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
             tv_content.setText(itemData.getContent());
             if (groupId == 0) tv_content.setTextColor(Color.GRAY);
             else tv_content.setTextColor(Color.BLACK);
+            switch (groupId) {
+                case 1:
+                    holder.getRootView().setBackgroundColor(Color.parseColor("#f44336"));break;
+                case 2:
+                    holder.getRootView().setBackgroundColor(Color.parseColor("#ef9a9a"));break;
+                case 3:
+                    holder.getRootView().setBackgroundColor(Color.parseColor("#ffcdd2"));break;
+                case 4:
+                    holder.getRootView().setBackgroundColor(Color.parseColor("#ffebee"));break;
+                default:
+            }
         }
 
         if (tv_time != null) {
@@ -114,6 +128,17 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
             tv_time.setText(Tools.transDB2RV(itemData.getTime()));
             if (groupId == 0) tv_time.setTextColor(Color.GRAY);
             else tv_time.setTextColor(Color.BLACK);
+            switch (groupId) {
+                case 1:
+                    holder.getRootView().setBackgroundColor(Color.parseColor("#f44336"));break;
+                case 2:
+                    holder.getRootView().setBackgroundColor(Color.parseColor("#ef9a9a"));break;
+                case 3:
+                    holder.getRootView().setBackgroundColor(Color.parseColor("#ffcdd2"));break;
+                case 4:
+                    holder.getRootView().setBackgroundColor(Color.parseColor("#ffebee"));break;
+                default:
+            }
         }
 //        System.out.println(holder.getItemViewType());
 

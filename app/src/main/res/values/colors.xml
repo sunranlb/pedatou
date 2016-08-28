@@ -7,9 +7,9 @@
     <color name="btn_default_light_pressed">#40ffffff</color>
     <color name="header_history">#616161</color>
     <color name="header_today">#d50000</color>
-    <color name="header_tomorror">#ff5252</color>
-    <color name="header_within_one_week">#ff8a80</color>
-    <color name="header_within_two_weeks">#4caf50</color>
-    <color name="header_farther_future">#1de9b6</color>
+    <color name="header_tomorror">#ff1744</color>
+    <color name="header_within_one_week">#ff5252</color>
+    <color name="header_within_two_weeks">#ff8a80</color>
+    <color name="header_farther_future">#ffcdd2</color>
 
 </resources>
