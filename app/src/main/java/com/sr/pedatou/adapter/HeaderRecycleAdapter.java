@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by taro on 16/4/19.
  */
-public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecycleViewHolder>
+public class    HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecycleViewHolder>
         implements StickHeaderItemDecoration.IStickerHeaderDecoration {
     //分组数据列表
     protected List<List<T>> mGroupList;
@@ -29,13 +29,6 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
 
     protected boolean mIsShowHeader = true;
     protected int mCount = 0;
-    private OnRecyclerViewListener onRecyclerViewListener;
-
-    public static interface OnRecyclerViewListener {
-        void onItemClick(int position);
-
-        boolean onItemLongClick(int position);
-    }
 
     /**
      * 创建可以显示分组头部的recycleAdapter,其中Context与option不可为空

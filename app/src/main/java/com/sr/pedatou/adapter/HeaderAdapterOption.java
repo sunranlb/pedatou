@@ -96,8 +96,8 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
 //            layout.setIsDrawableTest(true);
 //            layout.setButtomText("小洪是SB,哇咔哫");
 //        }
-        if (mIsSetBgColor) {
-            holder.getRootView().setBackgroundColor(Color.parseColor("#99cc99"));
-        }
+//        if (mIsSetBgColor) {
+//            holder.getRootView().setBackgroundColor(Color.parseColor("#99cc99"));
+//        }
     }
 }
