@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private RVAdapter rvAdapter;
     private NoteDAO dao;
     private MyLinearLayoutManager layoutManager;
+    private Typeface typeface;
     private AlarmService alarmService;
     private List<List<Note>> mGroupList = null;
     private Map<Integer, String> mHeaderMap = new ArrayMap<Integer, String>();
@@ -190,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRV() {
         List<Note> dataList = dao.findAll();
-        Typeface typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
+        typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
         mGroupList = new LinkedList<List<Note>>();
         mHeaderMap = new ArrayMap<Integer, String>();
         initGroupListAndHeaderMap(dataList);
@@ -202,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
 
         mColorAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
                 (false, true), mGroupList, mHeaderMap, typeface);
-//        rvAdapter = new RVAdapter(typeface);
         layoutManager = new MyLinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv.setLayoutManager(layoutManager);
@@ -210,11 +210,21 @@ public class MainActivity extends AppCompatActivity {
         mStickDecoration = new StickHeaderItemDecoration(mColorAdapter);
         rv.addItemDecoration(mStickDecoration);
 
-//        rvAdapter.setOnRecyclerViewListener(this);
-//        rv.setAdapter(rvAdapter);
-//        rvAdapter.addList(dataList);
-
         rv.setItemAnimator(new MyItemAnimator());
+//        oldset(dataList);
+
+    }
+
+    private void oldset(List<Note> dataList) {
+        layoutManager = new MyLinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rv.setLayoutManager(layoutManager);
+        rvAdapter = new RVAdapter(dataList, typeface);
+
+//        rvAdapter.setOnRecyclerViewListener(this);
+        rv.setAdapter(rvAdapter);
+        rv.setItemAnimator(new MyItemAnimator());
+
     }
 
     private void initGroupListAndHeaderMap(List<Note> dataList) {
