@@ -61,7 +61,7 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
         if (context == null || option == null) {
             throw new NullPointerException("context and option can not be null");
         }
-        mApplicationContext = context.getApplicationContext();
+        mApplicationContext = context;
         mOptions = option;
         mHeaderMap = headerMap;
         typeface = t;
