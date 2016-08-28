@@ -78,9 +78,9 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
             tv_header.setText(header.toString());
         }
 
-        if (mIsSetBgColor) {
-            holder.getRootView().setBackgroundColor(Color.parseColor("#ff9900"));
-        }
+//        if (mIsSetBgColor) {
+//            holder.getRootView().setBackgroundColor(Color.parseColor("#ff9900"));
+//        }
     }
 
     @Override

@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="btn_default_light_normal">#00000000</color>
     <color name="btn_default_light_pressed">#40ffffff</color>
-    <color name="header_history"></color>
+    <color name="header_history">#616161</color>
     <color name="header_today">#d50000</color>
     <color name="header_tomorror">#ef9100</color>
     <color name="header_within_one_week">#ffff00</color>

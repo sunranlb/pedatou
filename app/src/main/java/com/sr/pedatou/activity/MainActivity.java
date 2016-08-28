@@ -276,10 +276,7 @@ public class MainActivity extends AppCompatActivity {
             if (t.compareTo(cal) >= 0) break;
             twoweekList.add(dataList.get(i));
         }
-        cal.add(Calendar.DAY_OF_MONTH, 1);
         for (; i < listSize; ++i) {
-            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
-            if (t.compareTo(cal) >= 0) break;
             fartherfutureList.add(dataList.get(i));
         }
         mGroupList.add(historyList);
