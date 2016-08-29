@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     private int todayPosition;
+    private boolean hasScrolledToToday;
 
     @Override
     public void onStop() {
@@ -211,18 +212,12 @@ public class MainActivity extends AppCompatActivity {
         rv.setAdapter(mColorAdapter);
         mStickDecoration = new StickHeaderItemDecoration(mColorAdapter);
         rv.addItemDecoration(mStickDecoration);
-
         rv.setItemAnimator(new MyItemAnimator());
-
-        scrollToToday();
-
+        rv.scrollToPosition(todayPosition);
 //        oldset(dataList);
 
     }
 
-    private void scrollToToday() {
-        rv.smoothScrollToPosition(todayPosition);
-    }
 
 
     private void oldset(List<Note> dataList) {
@@ -334,6 +329,5 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
 }
