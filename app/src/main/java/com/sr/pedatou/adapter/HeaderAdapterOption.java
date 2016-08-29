@@ -2,7 +2,7 @@ package com.sr.pedatou.adapter;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.CardView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -82,17 +82,23 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
         }
         switch (groupId) {
             case 0:
-                iv_header.setImageResource(R.drawable.header_line_history);break;
+                iv_header.setImageResource(R.drawable.header_line_history);
+                break;
             case 1:
-                iv_header.setImageResource(R.drawable.header_line_today);break;
+                iv_header.setImageResource(R.drawable.header_line_today);
+                break;
             case 2:
-                iv_header.setImageResource(R.drawable.header_line_tomorror);break;
+                iv_header.setImageResource(R.drawable.header_line_tomorror);
+                break;
             case 3:
-                iv_header.setImageResource(R.drawable.header_line_within_one_week);break;
+                iv_header.setImageResource(R.drawable.header_line_within_one_week);
+                break;
             case 4:
-                iv_header.setImageResource(R.drawable.header_line_within_two_weeks);break;
+                iv_header.setImageResource(R.drawable.header_line_within_two_weeks);
+                break;
             case 5:
-                iv_header.setImageResource(R.drawable.header_line_farther_future);break;
+                iv_header.setImageResource(R.drawable.header_line_farther_future);
+                break;
             default:
         }
 //        if (mIsSetBgColor) {
@@ -103,24 +109,15 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
     @Override
     public void setViewHolder(int groupId, int childId, int position, Note itemData,
                               HeaderRecycleViewHolder holder, Typeface t) {
+//        System.out.println("gid:"+groupId+",cid:"+childId+"pos:"+position);
         TextView tv_time = holder.getView(R.id.list_item_time);
         TextView tv_content = holder.getView(R.id.list_item_content);
+        CardView rootView = (CardView) holder.getRootView();
         if (tv_content != null) {
             tv_content.setTypeface(t);
             tv_content.setText(itemData.getContent());
             if (groupId == 0) tv_content.setTextColor(Color.GRAY);
             else tv_content.setTextColor(Color.BLACK);
-            switch (groupId) {
-                case 1:
-                    holder.getRootView().setBackgroundColor(Color.parseColor("#f44336"));break;
-                case 2:
-                    holder.getRootView().setBackgroundColor(Color.parseColor("#ef9a9a"));break;
-                case 3:
-                    holder.getRootView().setBackgroundColor(Color.parseColor("#ffcdd2"));break;
-                case 4:
-                    holder.getRootView().setBackgroundColor(Color.parseColor("#ffebee"));break;
-                default:
-            }
         }
 
         if (tv_time != null) {
@@ -128,17 +125,23 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
             tv_time.setText(Tools.transDB2RV(itemData.getTime()));
             if (groupId == 0) tv_time.setTextColor(Color.GRAY);
             else tv_time.setTextColor(Color.BLACK);
-            switch (groupId) {
-                case 1:
-                    holder.getRootView().setBackgroundColor(Color.parseColor("#f44336"));break;
-                case 2:
-                    holder.getRootView().setBackgroundColor(Color.parseColor("#ef9a9a"));break;
-                case 3:
-                    holder.getRootView().setBackgroundColor(Color.parseColor("#ffcdd2"));break;
-                case 4:
-                    holder.getRootView().setBackgroundColor(Color.parseColor("#ffebee"));break;
-                default:
-            }
+        }
+        switch (groupId) {
+
+            case 1:
+                rootView.setCardBackgroundColor(Color.parseColor("#f44336"));
+                break;
+            case 2:
+                rootView.setCardBackgroundColor(Color.parseColor("#ef9a9a"));
+                break;
+            case 3:
+                rootView.setCardBackgroundColor(Color.parseColor("#ffcdd2"));
+                break;
+            case 4:
+                rootView.setCardBackgroundColor(Color.parseColor("#ffebee"));
+                break;
+            default:
+                rootView.setCardBackgroundColor(Color.parseColor("#ffffff"));
         }
 //        System.out.println(holder.getItemViewType());
 
@@ -148,7 +151,5 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
 //            layout.setIsDrawableTest(true);
 //            layout.setButtomText("小洪是SB,哇咔哫");
 //        }
-        if (mIsSetBgColor) {
-        }
     }
 }
