@@ -29,7 +29,8 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
     protected boolean mIsShowHeader = true;
     protected int mCount = 0;
     private OnHeaderParamsUpdateListener mParamsUpdateListener = null;
-    private Typeface typeface;
+    private Typeface mNoteTypeface;
+    private Typeface mHeaderTypeface;
     private HeaderRecycleViewHolder.OnItemClickListener e = new HeaderRecycleViewHolder
             .OnItemClickListener() {
 
@@ -57,14 +58,15 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
      * @param headerMap 分组头部匹配的Map
      */
     public HeaderRecycleAdapter(Context context, IHeaderAdapterOption<T, H> option, List<List<T>>
-            groupList, Map<Integer, H> headerMap, Typeface t) {
+            groupList, Map<Integer, H> headerMap, Typeface noteTF, Typeface headerTF) {
         if (context == null || option == null) {
             throw new NullPointerException("context and option can not be null");
         }
         mApplicationContext = context;
         mOptions = option;
         mHeaderMap = headerMap;
-        typeface = t;
+        mNoteTypeface = noteTF;
+        mHeaderTypeface = headerTF;
         this.setGroupList(groupList);
     }
 
@@ -219,12 +221,12 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
         if (isHeaderItem(p)) {
             //设置头部数据显示
             headerData = mHeaderMap.get(p.x);
-            mOptions.setHeaderHolder(p.x, headerData, holder);
+            mOptions.setHeaderHolder(p.x, headerData, holder, mHeaderTypeface);
         } else {
             //设置普通Item数据显示
             List<T> itemList = mGroupList.get(p.x);
             itemData = itemList != null ? itemList.get(p.y) : null;
-            mOptions.setViewHolder(p.x, p.y, position, itemData, holder, typeface);
+            mOptions.setViewHolder(p.x, p.y, position, itemData, holder, mNoteTypeface);
         }
     }
 
@@ -407,7 +409,7 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
             holder = new HeaderRecycleViewHolder(this, headerView);
             headerView.setTag(holder);
         }
-        mOptions.setHeaderHolder(p.x, headerObj, holder);
+        mOptions.setHeaderHolder(p.x, headerObj, holder, mHeaderTypeface);
     }
 
     @Override
@@ -470,7 +472,7 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
          * @param header  当前Header数据,来自于Map
          * @param holder
          */
-        public void setHeaderHolder(int groupId, H header, HeaderRecycleViewHolder holder);
+        public void setHeaderHolder(int groupId, H header, HeaderRecycleViewHolder holder, Typeface t);
 
         /**
          * 设置子项ViewHolder

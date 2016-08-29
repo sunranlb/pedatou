@@ -74,10 +74,11 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
     }
 
     @Override
-    public void setHeaderHolder(int groupId, String header, HeaderRecycleViewHolder holder) {
+    public void setHeaderHolder(int groupId, String header, HeaderRecycleViewHolder holder, Typeface t) {
         TextView tv_header = holder.getView(R.id.tv_header);
         ImageView iv_header = holder.getView(R.id.line_header);
         if (tv_header != null) {
+            tv_header.setTypeface(t);
             tv_header.setText(header.toString());
         }
         switch (groupId) {

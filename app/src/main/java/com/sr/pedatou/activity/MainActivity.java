@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
@@ -12,7 +11,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.util.ArrayMap;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -61,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
     private RVAdapter rvAdapter;
     private NoteDAO dao;
     private MyLinearLayoutManager layoutManager;
-    private Typeface typeface;
+    private Typeface noteTypeface;
+    private Typeface headerTypeface;
     private AlarmService alarmService;
     private List<List<Note>> mGroupList = null;
     private Map<Integer, String> mHeaderMap = new ArrayMap<Integer, String>();
@@ -191,7 +190,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initRV() {
         List<Note> dataList = dao.findAll();
-        typeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
+        noteTypeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
+        headerTypeface = Typeface.createFromAsset(this.getAssets(), "fonts/Pacifico.ttf");
         mGroupList = new LinkedList<List<Note>>();
         mHeaderMap = new ArrayMap<Integer, String>();
         initGroupListAndHeaderMap(dataList);
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mColorAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
-                (false, true), mGroupList, mHeaderMap, typeface);
+                (false, true), mGroupList, mHeaderMap, noteTypeface, headerTypeface);
         layoutManager = new MyLinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv.setLayoutManager(layoutManager);
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new MyLinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv.setLayoutManager(layoutManager);
-        rvAdapter = new RVAdapter(dataList, typeface);
+        rvAdapter = new RVAdapter(dataList, noteTypeface);
 
 //        rvAdapter.setOnRecyclerViewListener(this);
         rv.setAdapter(rvAdapter);
