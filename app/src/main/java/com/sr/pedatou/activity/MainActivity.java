@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.sr.pedatou.R;
 import com.sr.pedatou.adapter.HeaderAdapterOption;
 import com.sr.pedatou.adapter.HeaderRecycleAdapter;
-//import com.sr.pedatou.adapter.RVAdapter;
 import com.sr.pedatou.adapter.RVAdapter;
 import com.sr.pedatou.dao.NoteDAO;
 import com.sr.pedatou.others.MyItemAnimator;
@@ -42,6 +41,8 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+//import com.sr.pedatou.adapter.RVAdapter;
 
 public class MainActivity extends AppCompatActivity {
     static final public String TAG = "MA";
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
             isBindService = false;
         }
     };
-
+    private int todayPosition;
 
     @Override
     public void onStop() {
@@ -194,12 +195,13 @@ public class MainActivity extends AppCompatActivity {
         headerTypeface = Typeface.createFromAsset(this.getAssets(), "fonts/Pacifico.ttf");
         mGroupList = new LinkedList<List<Note>>();
         mHeaderMap = new ArrayMap<Integer, String>();
+
         initGroupListAndHeaderMap(dataList);
 
-        for (int i = 0; i < mGroupList.size(); ++i) {
-            System.out.println(mHeaderMap.get(i));
-            System.out.println(mGroupList.get(i));
-        }
+//        for (int i = 0; i < mGroupList.size(); ++i) {
+//            System.out.println(mHeaderMap.get(i));
+//            System.out.println(mGroupList.get(i));
+//        }
 
         mColorAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
                 (false, true), mGroupList, mHeaderMap, noteTypeface, headerTypeface);
@@ -211,9 +213,17 @@ public class MainActivity extends AppCompatActivity {
         rv.addItemDecoration(mStickDecoration);
 
         rv.setItemAnimator(new MyItemAnimator());
+
+        scrollToToday();
+
 //        oldset(dataList);
 
     }
+
+    private void scrollToToday() {
+        rv.smoothScrollToPosition(todayPosition);
+    }
+
 
     private void oldset(List<Note> dataList) {
         layoutManager = new MyLinearLayoutManager(this);
@@ -226,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
         rv.setItemAnimator(new MyItemAnimator());
 
     }
-
+    // 设置列表数组和header数组，并确定today的位置
     private void initGroupListAndHeaderMap(List<Note> dataList) {
         Calendar cal = Calendar.getInstance();
         cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
@@ -241,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
 
         int listSize = dataList.size();
         int i = 0;
+        todayPosition = 0;
         List<Note> historyList = new ArrayList<Note>();
         List<Note> todayList = new ArrayList<Note>();
         List<Note> tomorrowList = new ArrayList<Note>();
@@ -252,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
             if (t.compareTo(cal) >= 0) break;
             historyList.add(dataList.get(i));
         }
+        todayPosition += i + 1;
         cal.add(Calendar.DAY_OF_MONTH, 1);
         for (; i < listSize; ++i) {
             Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
