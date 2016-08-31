@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
@@ -11,6 +12,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.util.ArrayMap;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -306,17 +308,29 @@ public class MainActivity extends AppCompatActivity {
                 isHeader, View rootView, HeaderRecycleViewHolder holder) {
             Intent i = new Intent();
             i.setClass(MainActivity.this, AddActivity.class);
-            Note n = (Note)mHeaderRVAdapter.getItem(groupId, childId);
+            Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
             System.out.println("onItemClick: Note's id = " + n.getId());
             i.putExtra("id", n.getId());
             startActivityForResult(i, BIND_AUTO_CREATE);
         }
 
         @Override
-        public void onItemLongClick(int groupId, int childId, int position, int viewId, boolean
+        public void onItemLongClick(final int groupId, final int childId, int position, int viewId, boolean
                 isHeader, View rootView, HeaderRecycleViewHolder holder) {
             System.out.println("onItemLongClick");
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Delete It???").setNegativeButton("CANCEL", null);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
+                    alarmService.deleteAlarm(n);
+                    dao.detele(n.getId());
+//                    rvAdapter.remove(position);
+                }
+            });
+            builder.show();
         }
     };
 //    @Override
