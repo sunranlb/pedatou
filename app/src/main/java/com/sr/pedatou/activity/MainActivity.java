@@ -42,7 +42,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-//import com.sr.pedatou.adapter.RVAdapter;
 
 public class MainActivity extends AppCompatActivity {
     static final public String TAG = "MA";
