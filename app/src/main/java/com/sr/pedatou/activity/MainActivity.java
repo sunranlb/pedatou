@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.sr.pedatou.R;
 import com.sr.pedatou.adapter.HeaderAdapterOption;
 import com.sr.pedatou.adapter.HeaderRecycleAdapter;
+import com.sr.pedatou.adapter.HeaderRecycleViewHolder;
 import com.sr.pedatou.adapter.RVAdapter;
 import com.sr.pedatou.dao.NoteDAO;
 import com.sr.pedatou.others.MyItemAnimator;
@@ -42,6 +43,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+//import com.sr.pedatou.adapter.RVAdapter;
 
 public class MainActivity extends AppCompatActivity {
     static final public String TAG = "MA";
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     TextView toolbarTitle;
     @BindView(R.id.toolbar_add_btn)
     ImageButton toolbarAddBtn;
-    HeaderRecycleAdapter mColorAdapter = null;
+    HeaderRecycleAdapter mHeaderRVAdapter = null;
     StickHeaderItemDecoration mStickDecoration = null;
     private RVAdapter rvAdapter;
     private NoteDAO dao;
@@ -203,20 +205,20 @@ public class MainActivity extends AppCompatActivity {
 //            System.out.println(mGroupList.get(i));
 //        }
 
-        mColorAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
-                (false, true), mGroupList, mHeaderMap, noteTypeface, headerTypeface);
+        mHeaderRVAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
+                (false, true), mGroupList, mHeaderMap, noteTypeface, headerTypeface,
+                onNoteClickListener);
         layoutManager = new MyLinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv.setLayoutManager(layoutManager);
-        rv.setAdapter(mColorAdapter);
-        mStickDecoration = new StickHeaderItemDecoration(mColorAdapter);
+        rv.setAdapter(mHeaderRVAdapter);
+        mStickDecoration = new StickHeaderItemDecoration(mHeaderRVAdapter);
         rv.addItemDecoration(mStickDecoration);
         rv.setItemAnimator(new MyItemAnimator());
         rv.scrollToPosition(todayPosition);
 //        oldset(dataList);
 
     }
-
 
 
     private void oldset(List<Note> dataList) {
@@ -230,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
         rv.setItemAnimator(new MyItemAnimator());
 
     }
+
     // 设置列表数组和header数组，并确定today的位置
     private void initGroupListAndHeaderMap(List<Note> dataList) {
         Calendar cal = Calendar.getInstance();
@@ -294,6 +297,28 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private HeaderRecycleViewHolder.OnItemClickListener onNoteClickListener = new
+            HeaderRecycleViewHolder.OnItemClickListener() {
+
+
+        @Override
+        public void onItemClick(int groupId, int childId, int position, int viewId, boolean
+                isHeader, View rootView, HeaderRecycleViewHolder holder) {
+            Intent i = new Intent();
+            i.setClass(MainActivity.this, AddActivity.class);
+            Note n = (Note)mHeaderRVAdapter.getItem(groupId, childId);
+            System.out.println("onItemClick: Note's id = " + n.getId());
+            i.putExtra("id", n.getId());
+            startActivityForResult(i, BIND_AUTO_CREATE);
+        }
+
+        @Override
+        public void onItemLongClick(int groupId, int childId, int position, int viewId, boolean
+                isHeader, View rootView, HeaderRecycleViewHolder holder) {
+            System.out.println("onItemLongClick");
+
+        }
+    };
 //    @Override
 //    public void onItemClick(int position) {
 //        Intent i = new Intent();
@@ -301,7 +326,7 @@ public class MainActivity extends AppCompatActivity {
 //        i.putExtra("id", rvAdapter.getItem(position).getId());
 //        startActivityForResult(i, BIND_AUTO_CREATE);
 //    }
-//
+
 //    @Override
 //    public boolean onItemLongClick(final int position) {
 //        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);

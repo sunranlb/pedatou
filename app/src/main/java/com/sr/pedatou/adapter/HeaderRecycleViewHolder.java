@@ -203,16 +203,6 @@ public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements 
         }
     }
 
-    /**
-     * 注册简单的view单击事件,此处不仅限于对整个item进行注册,可以是item中某个view
-     *
-     * @param viewId   需要注册的viewId
-     * @param listener 单击响应事件
-     * @return
-     */
-    public boolean registerSimpleViewOnClickListener(int viewId, SimpleItemClickListener listener) {
-        return this.registerViewOnClickListener(viewId, listener);
-    }
 
     /**
      * 清除指定viewId注册的单击事件
@@ -260,10 +250,10 @@ public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements 
         return mRootView;
     }
 
-    public TextView getmTime() {
+    public TextView getTime() {
         return mTime;
     }
-    public TextView getmContent() {
+    public TextView getContent() {
         return mContent;
     }
     /**
@@ -344,28 +334,6 @@ public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements 
     }
 
     /**
-     * 简单的ItemClick事件
-     */
-    public static abstract class SimpleItemClickListener implements OnItemClickListener {
-        /**
-         * itemClick事件
-         *
-         * @param groupId  当前item所在分组,分组ID从0开始
-         * @param childId  当前item在所有分组中的ID,从0开始,当此值为-1时,当前为该分组的头部
-         * @param position item位置
-         * @param viewId   viewId,此参数值为注册监听事件时使用的viewId
-         * @param holder
-         */
-        public abstract void onItemClick(int groupId, int childId, int position, int viewId, HeaderRecycleViewHolder holder);
-
-        @Override
-        public void onItemClick(int groupId, int childId, int position, int viewId, boolean isHeader, View rootView, HeaderRecycleViewHolder holder) {
-            this.onItemClick(groupId, childId, position, viewId, holder);
-        }
-    }
-
-
-    /**
      * itemClick事件
      */
     public interface OnItemClickListener {
@@ -380,9 +348,9 @@ public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements 
          * @param rootView 当前item的rootView
          * @param holder
          */
-        public void onItemClick(int groupId, int childId, int position, int viewId, boolean
-                isHeader, View rootView, HeaderRecycleViewHolder holder);
-        public void onItemLongClick(int groupId, int childId, int position, int viewId, boolean
+        void onItemClick(int groupId, int childId, int position, int viewId, boolean isHeader,
+                         View rootView, HeaderRecycleViewHolder holder);
+        void onItemLongClick(int groupId, int childId, int position, int viewId, boolean
                 isHeader, View rootView, HeaderRecycleViewHolder holder);
     }
 

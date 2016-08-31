@@ -12,13 +12,10 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
-import com.sr.pedatou.R;
 
 //import com.sr.pedatou.adapter.RVAdapter;
 
 import com.sr.pedatou.adapter.HeaderRecycleViewHolder;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -48,8 +45,8 @@ public class MyItemAnimator extends DefaultItemAnimator {
 
     @NonNull
     private ItemHolderInfo getItemHolderInfo(HeaderRecycleViewHolder viewHolder, NoteInfo info) {
-        info.time = viewHolder.getmTime().getText().toString();
-        info.content = viewHolder.getmContent().getText().toString();
+        info.time = viewHolder.getTime().getText().toString();
+        info.content = viewHolder.getContent().getText().toString();
         return info;
     }
 
@@ -103,8 +100,8 @@ public class MyItemAnimator extends DefaultItemAnimator {
         final String newContent = newInfo.content;
 
         // These are the objects whose values will be animated
-        final TextView newTimeTextView = viewHolder.getmTime();
-        final TextView newContentTextView = viewHolder.getmContent();
+        final TextView newTimeTextView = viewHolder.getTime();
+        final TextView newContentTextView = viewHolder.getContent();
 
         // Check to see if there's a change animation already running on this item
         AnimatorInfo runningInfo = mAnimatorMap.get(newHolder);
