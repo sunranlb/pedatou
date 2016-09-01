@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sr.pedatou.R;
 import com.sr.pedatou.adapter.HeaderAdapterOption;
@@ -231,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        rvAdapter.setOnRecyclerViewListener(this);
         rv.setAdapter(rvAdapter);
-        rv.setItemAnimator(new MyItemAnimator());
+//        rv.setItemAnimator(new MyItemAnimator());
 
     }
 
@@ -315,22 +316,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onItemLongClick(final int groupId, final int childId, int position, int viewId, boolean
+        public void onItemLongClick(final int groupId, final int childId, final int position, int viewId, boolean
                 isHeader, View rootView, HeaderRecycleViewHolder holder) {
             System.out.println("onItemLongClick");
+            Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
+//            alarmService.deleteAlarm(n);
+//            dao.detele(n.getId());
+            mHeaderRVAdapter.remove(groupId, childId, position, n);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle("Delete It???").setNegativeButton("CANCEL", null);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int which) {
-                    Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
-                    alarmService.deleteAlarm(n);
-                    dao.detele(n.getId());
-//                    rvAdapter.remove(position);
-                }
-            });
-            builder.show();
+//            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+//            builder.setTitle("Delete It???").setNegativeButton("CANCEL", null);
+//            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//
+//                public void onClick(DialogInterface dialog, int which) {
+//                    Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
+//                    alarmService.deleteAlarm(n);
+//                    dao.detele(n.getId());
+//                    mHeaderRVAdapter.remove(groupId, childId, position, n);
+//                }
+//            });
+//            builder.show();
         }
     };
 //    @Override

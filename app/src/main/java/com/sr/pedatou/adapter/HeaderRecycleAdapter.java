@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.sr.pedatou.activity.AddActivity;
 import com.sr.pedatou.activity.MainActivity;
 import com.sr.pedatou.others.StickHeaderItemDecoration;
+import com.sr.pedatou.util.Note;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,6 +162,14 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
     public T getItem(int groupId, int childId) {
         Point p = new Point(groupId, childId);
         return getItem(p);
+    }
+
+    public boolean remove(int groupId, int childId, int position, Note n) {
+        mGroupList.get(groupId).remove(n);
+        mEachGroupCountList.set(groupId, mEachGroupCountList.get(groupId) - 1);
+        mCount--;
+        notifyItemRemoved(position);
+        return true;
     }
 
     /**
