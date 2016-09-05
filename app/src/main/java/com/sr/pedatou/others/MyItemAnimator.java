@@ -45,8 +45,14 @@ public class MyItemAnimator extends DefaultItemAnimator {
 
     @NonNull
     private ItemHolderInfo getItemHolderInfo(HeaderRecycleViewHolder viewHolder, NoteInfo info) {
-        info.time = viewHolder.getTime().getText().toString();
-        info.content = viewHolder.getContent().getText().toString();
+        TextView mTime = viewHolder.getTime();
+        TextView mContent = viewHolder.getContent();
+        if (mTime != null) {
+            info.time = mTime.getText().toString();
+        }
+        if (mContent != null) {
+            info.content = mContent.getText().toString();
+        }
         return info;
     }
 

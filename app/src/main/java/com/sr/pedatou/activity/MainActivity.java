@@ -318,24 +318,19 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onItemLongClick(final int groupId, final int childId, final int position, int viewId, boolean
                 isHeader, View rootView, HeaderRecycleViewHolder holder) {
-            System.out.println("onItemLongClick");
-            Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
-//            alarmService.deleteAlarm(n);
-//            dao.detele(n.getId());
-            mHeaderRVAdapter.remove(groupId, childId, position, n);
 
-//            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-//            builder.setTitle("Delete It???").setNegativeButton("CANCEL", null);
-//            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//
-//                public void onClick(DialogInterface dialog, int which) {
-//                    Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
-//                    alarmService.deleteAlarm(n);
-//                    dao.detele(n.getId());
-//                    mHeaderRVAdapter.remove(groupId, childId, position, n);
-//                }
-//            });
-//            builder.show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Delete It???").setNegativeButton("CANCEL", null);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
+                    alarmService.deleteAlarm(n);
+                    dao.detele(n.getId());
+                    mHeaderRVAdapter.remove(groupId, childId, position, n);
+                }
+            });
+            builder.show();
         }
     };
 //    @Override
