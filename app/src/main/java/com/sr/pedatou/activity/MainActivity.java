@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
     TextView toolbarTitle;
     @BindView(R.id.toolbar_add_btn)
     ImageButton toolbarAddBtn;
-    HeaderRecycleAdapter mHeaderRVAdapter = null;
-    StickHeaderItemDecoration mStickDecoration = null;
+    private HeaderRecycleAdapter mHeaderRVAdapter = null;
+    private StickHeaderItemDecoration mStickDecoration = null;
     private RVAdapter rvAdapter;
     private NoteDAO dao;
     private MyLinearLayoutManager layoutManager;
@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     private int todayPosition;
-    private boolean hasScrolledToToday;
 
     @Override
     public void onStop() {
@@ -135,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         String str = bundle.getString("needRefreshLV");
         if (str != null) {
             if (str.equals("1")) { // added
-//                addNewFromDB();
+                addNewFromDB();
             } else if (str.equals("2")) { //change one content
 //                changeOneNoteContent();
             } else if (str.equals("3")) { //change content but has the same time
@@ -184,15 +183,26 @@ public class MainActivity extends AppCompatActivity {
 //        if (i != s) rvAdapter.changeOneNoteContent(i, tmp.get(i).getContent());
 //    }
 
-//    private void addNewFromDB() {
-//        List<Note> tmp = dao.findAll();
-//        List<Note> adapterDataList = rvAdapter.getDataList();
-//        int i = 0, s = adapterDataList.size();
-//        for (; i < s; ++i) {
-//            if (!(tmp.get(i).getTime().equals(adapterDataList.get(i).getTime()))) break;
-//        }
-//        rvAdapter.add(i, tmp.get(i));
-//    }
+    private void addNewFromDB() {
+        List<Note> tmp = dao.findAll();
+        List<List<Note>> adapterDatalist = mHeaderRVAdapter.getGroupList();
+        initGroupListAndHeaderMap(tmp);
+        int groupId = 0, childId = 0, pos = 0;
+        int groupSize = adapterDatalist.size(), childSize;
+        for (; groupId < groupSize; ++groupId) {
+            List<Note> t = adapterDatalist.get(groupId);
+            childSize = t.size();
+            for(; childId < childSize; ++childId) {
+                if (!(tmp.get(pos).getTime().equals(t.get(childId).getTime()))) {
+                    mHeaderRVAdapter.add(pos, adapterDatalist);
+                    return;
+                }
+                pos++;
+            }
+            pos++;
+        }
+        mHeaderRVAdapter.add(pos, adapterDatalist);
+    }
 
     private void initRV() {
         List<Note> dataList = dao.findAll();
@@ -238,6 +248,8 @@ public class MainActivity extends AppCompatActivity {
 
     // 设置列表数组和header数组，并确定today的位置
     private void initGroupListAndHeaderMap(List<Note> dataList) {
+        mHeaderMap.clear();
+        mGroupList.clear();
         Calendar cal = Calendar.getInstance();
         cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
                 0, 0, 0);

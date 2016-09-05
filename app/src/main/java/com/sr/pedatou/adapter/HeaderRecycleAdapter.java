@@ -59,6 +59,21 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
         this.setGroupList(groupList);
     }
 
+    public boolean remove(int groupId, int childId, int position, Note n) {
+        mGroupList.get(groupId).remove(n);
+        mEachGroupCountList.set(groupId, mEachGroupCountList.get(groupId) - 1);
+        mCount--;
+        notifyItemRemoved(position);
+        return true;
+    }
+
+    public boolean add(int position, List<List<T>> n) {
+//        mGroupList.get(groupId).add(childId, n);
+//        mEachGroupCountList.set(groupId, mEachGroupCountList.get(groupId) + 1);
+        setGroupList(n);
+        notifyItemInserted(position);
+        return true;
+    }
     /**
      * 设置或者更新adapter的option
      *
@@ -162,14 +177,6 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
     public T getItem(int groupId, int childId) {
         Point p = new Point(groupId, childId);
         return getItem(p);
-    }
-
-    public boolean remove(int groupId, int childId, int position, Note n) {
-        mGroupList.get(groupId).remove(n);
-        mEachGroupCountList.set(groupId, mEachGroupCountList.get(groupId) - 1);
-        mCount--;
-        notifyItemRemoved(position);
-        return true;
     }
 
     /**
