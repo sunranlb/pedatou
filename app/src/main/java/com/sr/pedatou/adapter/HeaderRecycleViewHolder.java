@@ -1,18 +1,19 @@
 package com.sr.pedatou.adapter;
 
+import android.graphics.Point;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.Map;
 import com.sr.pedatou.R;
+
 /**
  * Created by taro on 16/4/19.
  */
-public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements View
+        .OnClickListener, View.OnLongClickListener {
     /**
      * 根布局的ID,使用0
      */
@@ -24,13 +25,9 @@ public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements 
     private TextView mTime;
     private TextView mContent;
     private OnItemClickListener mRootViewClickListener = null;
-    //当前项是否可以响应单击事件
-    private boolean mIsClickEnabled = true;
     private HeaderRecycleAdapter mParentAdapter = null;
     //View缓存
     private ArrayMap<Integer, View> mViewHolder = null;
-
-    private Map<Integer, OnItemClickListener> mItemClickMap = null;
 
     /**
      * 带adapter的holder,推荐使用此方法(很常会用到adapter)
@@ -171,75 +168,6 @@ public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements 
         mRootView.setOnLongClickListener(this);
     }
 
-    /**
-     * 清除rootView的单击响应事件
-     */
-    public void unregisterRootViewItemClickListener() {
-        mRootViewClickListener = null;
-        mRootView.setOnClickListener(null);
-        mRootView.setOnLongClickListener(null);
-    }
-
-    /**
-     * 注册view的单击事件,此处不仅限于对整个item进行注册,可以是item中某个view,
-     * 也可以是rootView,但rootView不推荐在此处注册,通过{@link #registerRootViewItemClickListener(OnItemClickListener)}注册rootView的单击响应事件
-     *
-     * @param viewId   需要注册的viewId
-     * @param listener 单击响应事件
-     * @return
-     */
-    public boolean registerViewOnClickListener(int viewId, OnItemClickListener listener) {
-        if (mItemClickMap == null) {
-            mItemClickMap = new ArrayMap<Integer, OnItemClickListener>(15);
-        }
-        View view = this.getView(viewId);
-        if (view != null) {
-            mItemClickMap.put(viewId, listener);
-            view.setOnClickListener(this);
-            view.setOnLongClickListener(this);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
-    /**
-     * 清除指定viewId注册的单击事件
-     *
-     * @param viewId
-     * @return 成功清除返回true, 若无该viewId注册事件返回false
-     */
-    public boolean unregisterViewOnClickListener(int viewId) {
-        if (mItemClickMap == null) {
-            return true;
-        } else {
-            View view = this.getView(viewId);
-            if (view != null) {
-                view.setOnClickListener(null);
-            }
-            OnItemClickListener listener = mItemClickMap.remove(viewId);
-            return listener != null;
-        }
-    }
-
-    /**
-     * 清除所有单击注册监听事件
-     */
-    public void unregisterAllViewOnClickListener() {
-        if (mItemClickMap != null) {
-            for (int viewId : mItemClickMap.keySet()) {
-                View view = this.getView(viewId);
-                if (view != null) {
-                    view.setOnClickListener(null);
-                    view.setOnLongClickListener(null);
-                }
-            }
-            mItemClickMap.clear();
-        }
-        mRootView.setOnClickListener(null);
-        mRootViewClickListener = null;
-    }
 
     /**
      * 获取根布局
@@ -253,9 +181,11 @@ public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements 
     public TextView getTime() {
         return mTime;
     }
+
     public TextView getContent() {
         return mContent;
     }
+
     /**
      * 获取父adapter
      *
@@ -265,71 +195,22 @@ public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements 
         return mParentAdapter;
     }
 
-    /**
-     * 设置当前item是否可响应单击
-     *
-     * @param isEnabled
-     */
-    public void setIsItemClickable(boolean isEnabled) {
-        mIsClickEnabled = isEnabled;
-    }
-
-    /**
-     * 获取当前item是否可响应单击
-     *
-     * @return
-     */
-    public boolean getIsItemClickable() {
-        return mIsClickEnabled;
-    }
-
-    /**
-     * 处理当前item的单击事件
-     *
-     * @param v
-     */
     @Override
     public void onClick(View v) {
-//        System.out.println("onClick");
-        //允许单击事件
-        if (mIsClickEnabled) {
-            //如果存在rootView的监听事件,只响应rootView的监听事件
-            if (mRootViewClickListener != null) {
-//                System.out.println("mRV != null");
-                mRootViewClickListener.onItemClick(mGroupId, mChildId, getAdapterPosition(), ROOT_VIEW_ID, this.isHeaderItem(), mRootView, this);
-            } else {
-                //否则根据注册的view尝试响应监听事件
-                int id = v.getId();
-//                System.out.println("mRV == null");
-                OnItemClickListener listener = mItemClickMap == null ? null : mItemClickMap.get(id);
-                if (listener != null) {
-                    listener.onItemClick(mGroupId, mChildId, getAdapterPosition(), id, this.isHeaderItem(), mRootView, this);
-                }
-            }
-        } else {
-            Log.i("view holder", "itemClickListener监听事件不存在或者该item不可响应点击事件");
-        }
+        int position = getAdapterPosition();
+        Point p = mParentAdapter.getGroupIdAndChildIdFromPosition(mParentAdapter.getEachGroupCountList(), position, true);
+        setGroupIdAndChildId(p.x, p.y);
+        mRootViewClickListener.onItemClick(mGroupId, mChildId, position,
+                ROOT_VIEW_ID, this.isHeaderItem(), mRootView, this);
     }
 
     @Override
     public boolean onLongClick(View v) {
-        if (mIsClickEnabled) {
-            //如果存在rootView的监听事件,只响应rootView的监听事件
-            if (mRootViewClickListener != null) {
-//                System.out.println("mRV != null");
-                mRootViewClickListener.onItemLongClick(mGroupId, mChildId, getAdapterPosition(), ROOT_VIEW_ID, this.isHeaderItem(), mRootView, this);
-            } else {
-                //否则根据注册的view尝试响应监听事件
-                int id = v.getId();
-//                System.out.println("mRV == null");
-                OnItemClickListener listener = mItemClickMap == null ? null : mItemClickMap.get(id);
-                if (listener != null) {
-                    listener.onItemLongClick(mGroupId, mChildId, getAdapterPosition(), id, this.isHeaderItem(), mRootView, this);
-                }
-            }
-        } else {
-            Log.i("view holder", "itemClickListener监听事件不存在或者该item不可响应点击事件");
-        }
+        int position = getAdapterPosition();
+        Point p = mParentAdapter.getGroupIdAndChildIdFromPosition(mParentAdapter.getEachGroupCountList(), position, true);
+        setGroupIdAndChildId(p.x, p.y);
+        mRootViewClickListener.onItemLongClick(mGroupId, mChildId, position,
+                ROOT_VIEW_ID, this.isHeaderItem(), mRootView, this);
         return true;
     }
 
@@ -350,6 +231,7 @@ public class HeaderRecycleViewHolder extends RecyclerView.ViewHolder implements 
          */
         void onItemClick(int groupId, int childId, int position, int viewId, boolean isHeader,
                          View rootView, HeaderRecycleViewHolder holder);
+
         void onItemLongClick(int groupId, int childId, int position, int viewId, boolean
                 isHeader, View rootView, HeaderRecycleViewHolder holder);
     }

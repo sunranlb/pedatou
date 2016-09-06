@@ -198,7 +198,6 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
     public void onViewRecycled(HeaderRecycleViewHolder holder) {
         super.onViewRecycled(holder);
         holder.clearViewCache();
-        holder.unregisterAllViewOnClickListener();
     }
 
     @Override
