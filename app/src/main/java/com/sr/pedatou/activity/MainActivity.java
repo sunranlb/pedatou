@@ -21,7 +21,6 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sr.pedatou.R;
 import com.sr.pedatou.adapter.HeaderAdapterOption;
@@ -84,6 +83,39 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     private int todayPosition;
+    private HeaderRecycleViewHolder.OnItemClickListener onNoteClickListener = new
+            HeaderRecycleViewHolder.OnItemClickListener() {
+
+
+        @Override
+        public void onItemClick(int groupId, int childId, int position, int viewId, boolean
+                isHeader, View rootView, HeaderRecycleViewHolder holder) {
+            Intent i = new Intent();
+            i.setClass(MainActivity.this, AddActivity.class);
+            Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
+            System.out.println("onItemClick: Note's id = " + n.getId());
+            i.putExtra("id", n.getId());
+            startActivityForResult(i, BIND_AUTO_CREATE);
+        }
+
+        @Override
+        public void onItemLongClick(final int groupId, final int childId, final int position, int
+                viewId, boolean isHeader, View rootView, HeaderRecycleViewHolder holder) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Delete It???").setNegativeButton("CANCEL", null);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
+                    alarmService.deleteAlarm(n);
+                    dao.detele(n.getId());
+                    mHeaderRVAdapter.remove(groupId, childId, position, n);
+                }
+            });
+            builder.show();
+        }
+    };
 
     @Override
     public void onStop() {
@@ -166,11 +198,6 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void initToolbar() {
-        toolbarTitle.setText("pedatou");
-        setSupportActionBar(toolbar);
-    }
-
 //    private void changeOneNoteContent() {
 //        List<Note> tmp = dao.findAll();
 //        List<Note> adapterDataList = rvAdapter.getDataList();
@@ -183,25 +210,48 @@ public class MainActivity extends AppCompatActivity {
 //        if (i != s) rvAdapter.changeOneNoteContent(i, tmp.get(i).getContent());
 //    }
 
+    private void initToolbar() {
+        toolbarTitle.setText("pedatou");
+        setSupportActionBar(toolbar);
+    }
+
+    private Note findNewNote(List<Note> dbList, List<Note> adapterList) {
+        Note addedNote;
+        int adapterDatalistSize = adapterList.size(), i = 0;
+        for(; i < adapterDatalistSize; ++i) {
+            if (!(dbList.get(i).getTime().equals(adapterList.get(i).getTime()))) {
+                addedNote = dbList.get(i);
+                return addedNote;
+            }
+        }
+        return dbList.get(i);
+    }
     private void addNewFromDB() {
-        List<Note> tmp = dao.findAll();
+        List<Note> daoList = dao.findAll();
+        List<Note> adapterList = mHeaderRVAdapter.getList();
+        Note addedNote = findNewNote(daoList, adapterList);
+
+        setGroupListAndHeaderMap(daoList);
         List<List<Note>> adapterDatalist = mHeaderRVAdapter.getGroupList();
-        initGroupListAndHeaderMap(tmp);
+
         int groupId = 0, childId = 0, pos = 0;
         int groupSize = adapterDatalist.size(), childSize;
         for (; groupId < groupSize; ++groupId) {
-            List<Note> t = adapterDatalist.get(groupId);
-            childSize = t.size();
-            for(; childId < childSize; ++childId) {
-                if (!(tmp.get(pos).getTime().equals(t.get(childId).getTime()))) {
-                    mHeaderRVAdapter.add(pos, adapterDatalist);
+            List<Note> adapterGroupList = adapterDatalist.get(groupId);
+            childSize = adapterGroupList.size();
+            childId = 0;
+            for (; childId < childSize; ++childId) {
+                if (addedNote.getTime().equals(adapterGroupList.get(childId).getTime())) {
+                    pos++;
+                    mHeaderRVAdapter.add(groupId, childId, pos, adapterDatalist, daoList);
                     return;
                 }
                 pos++;
             }
             pos++;
         }
-        mHeaderRVAdapter.add(pos, adapterDatalist);
+        pos++;
+        mHeaderRVAdapter.add(groupId, childId, pos, adapterDatalist, daoList);
     }
 
     private void initRV() {
@@ -211,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         mGroupList = new LinkedList<List<Note>>();
         mHeaderMap = new ArrayMap<Integer, String>();
 
-        initGroupListAndHeaderMap(dataList);
+        setGroupListAndHeaderMap(dataList);
 
 //        for (int i = 0; i < mGroupList.size(); ++i) {
 //            System.out.println(mHeaderMap.get(i));
@@ -219,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         mHeaderRVAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
-                (false, true), mGroupList, mHeaderMap, noteTypeface, headerTypeface,
+                (false, true), mGroupList, mHeaderMap, dataList, noteTypeface, headerTypeface,
                 onNoteClickListener);
         layoutManager = new MyLinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -232,7 +282,6 @@ public class MainActivity extends AppCompatActivity {
 //        oldset(dataList);
 
     }
-
 
     private void oldset(List<Note> dataList) {
         layoutManager = new MyLinearLayoutManager(this);
@@ -247,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 设置列表数组和header数组，并确定today的位置
-    private void initGroupListAndHeaderMap(List<Note> dataList) {
+    private void setGroupListAndHeaderMap(List<Note> dataList) {
         mHeaderMap.clear();
         mGroupList.clear();
         Calendar cal = Calendar.getInstance();
@@ -311,40 +360,6 @@ public class MainActivity extends AppCompatActivity {
         mGroupList.add(fartherfutureList);
 
     }
-
-    private HeaderRecycleViewHolder.OnItemClickListener onNoteClickListener = new
-            HeaderRecycleViewHolder.OnItemClickListener() {
-
-
-        @Override
-        public void onItemClick(int groupId, int childId, int position, int viewId, boolean
-                isHeader, View rootView, HeaderRecycleViewHolder holder) {
-            Intent i = new Intent();
-            i.setClass(MainActivity.this, AddActivity.class);
-            Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
-            System.out.println("onItemClick: Note's id = " + n.getId());
-            i.putExtra("id", n.getId());
-            startActivityForResult(i, BIND_AUTO_CREATE);
-        }
-
-        @Override
-        public void onItemLongClick(final int groupId, final int childId, final int position, int viewId, boolean
-                isHeader, View rootView, HeaderRecycleViewHolder holder) {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle("Delete It???").setNegativeButton("CANCEL", null);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int which) {
-                    Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
-                    alarmService.deleteAlarm(n);
-                    dao.detele(n.getId());
-                    mHeaderRVAdapter.remove(groupId, childId, position, n);
-                }
-            });
-            builder.show();
-        }
-    };
 //    @Override
 //    public void onItemClick(int position) {
 //        Intent i = new Intent();

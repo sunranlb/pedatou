@@ -24,6 +24,7 @@ import java.util.Map;
 public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecycleViewHolder>
         implements StickHeaderItemDecoration.IStickerHeaderDecoration {
     //分组数据列表
+    protected List<T> mList;
     protected List<List<T>> mGroupList;
     protected List<Integer> mEachGroupCountList;
     //头部数据
@@ -32,7 +33,6 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
     protected IHeaderAdapterOption mOptions = null;
     protected boolean mIsShowHeader = true;
     protected int mCount = 0;
-    private OnHeaderParamsUpdateListener mParamsUpdateListener = null;
     private Typeface mNoteTypeface;
     private Typeface mHeaderTypeface;
     private HeaderRecycleViewHolder.OnItemClickListener onNoteClickListener;
@@ -46,7 +46,8 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
      * @param headerMap 分组头部匹配的Map
      */
     public HeaderRecycleAdapter(Context context, IHeaderAdapterOption<T, H> option, List<List<T>>
-            groupList, Map<Integer, H> headerMap, Typeface noteTF, Typeface headerTF, HeaderRecycleViewHolder.OnItemClickListener ocl) {
+            groupList, Map<Integer, H> headerMap, List<T> dataList, Typeface noteTF, Typeface headerTF,
+                                HeaderRecycleViewHolder.OnItemClickListener ocl) {
         if (context == null || option == null) {
             throw new NullPointerException("context and option can not be null");
         }
@@ -56,24 +57,28 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
         mNoteTypeface = noteTF;
         mHeaderTypeface = headerTF;
         onNoteClickListener = ocl;
+        mList = dataList;
         this.setGroupList(groupList);
     }
 
     public boolean remove(int groupId, int childId, int position, Note n) {
         mGroupList.get(groupId).remove(n);
+        mList.remove(n);
         mEachGroupCountList.set(groupId, mEachGroupCountList.get(groupId) - 1);
         mCount--;
         notifyItemRemoved(position);
         return true;
     }
 
-    public boolean add(int position, List<List<T>> n) {
+    public boolean add(int groupId, int childId, int position, List<List<T>> n, List<T> l) {
 //        mGroupList.get(groupId).add(childId, n);
 //        mEachGroupCountList.set(groupId, mEachGroupCountList.get(groupId) + 1);
+        mList = l;
         setGroupList(n);
         notifyItemInserted(position);
         return true;
     }
+
     /**
      * 设置或者更新adapter的option
      *
@@ -85,14 +90,6 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
         }
     }
 
-    /**
-     * 设置header更新参数的监听接口,触发对应的更新事件时将回调此接口
-     *
-     * @param listener
-     */
-    public void setHeaderParamsUpdateListener(OnHeaderParamsUpdateListener listener) {
-        mParamsUpdateListener = listener;
-    }
 
     /**
      * 获取分组列表的分组数据量list,list中每一项存放了对应的每一个分组的size
@@ -121,6 +118,9 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
         return mGroupList;
     }
 
+    public List<T> getList() {
+        return mList;
+    }
     /**
      * 设置分组灵气
      *
@@ -131,10 +131,6 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
         mEachGroupCountList = getEachGroupCountList(groupList);
         //更新数据总数,需要计算header数据在内
         updateCount(mEachGroupCountList, mIsShowHeader);
-        if (mParamsUpdateListener != null) {
-            mParamsUpdateListener.onUpdateGroupList(groupList);
-            mParamsUpdateListener.onUpdateEachGroupCountList(mEachGroupCountList);
-        }
     }
 
     /**
@@ -188,9 +184,6 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
         if (mIsShowHeader != isShowHeader) {
             updateCount(mEachGroupCountList, isShowHeader);
             mIsShowHeader = isShowHeader;
-            if (mParamsUpdateListener != null) {
-                mParamsUpdateListener.onUpdateIsShowHeader(isShowHeader);
-            }
         }
     }
 
@@ -344,9 +337,6 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
                 mCount += groupCount + groupEachLine;
             }
         }
-        if (mParamsUpdateListener != null) {
-            mParamsUpdateListener.OnUpdateCount(mCount);
-        }
     }
 
     /**
@@ -389,8 +379,7 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
 
     @Override
     public View getHeaderView(int position, int headerViewTag, RecyclerView parent) {
-        View itemView = LayoutInflater.from(mContext).inflate(headerViewTag, parent,
-                false);
+        View itemView = LayoutInflater.from(mContext).inflate(headerViewTag, parent, false);
         return itemView;
     }
 
