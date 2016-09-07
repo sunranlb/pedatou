@@ -294,10 +294,10 @@ public class AddActivity extends AppCompatActivity {
         note.setContent(editContent.getText().toString());
         note.setTime(time);
         dao.add(note);
-        note = dao.findByTime(time);
+        note = dao.findByTime(time); // 重新寻找的作用是填充id项
         setAlarm(note);
         Intent it = new Intent();
-        if (isToChangeNote) {
+        if (isToChangeNote) { // 进入这里的条件是用户点击RV修改了时间并且DB里没有该时间
             dao.detele(noteToChange.getId());
             it.putExtra("needRefreshLV", "4");
             it.putExtra("toDelete", "" + noteToChange.getId());

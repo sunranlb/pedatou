@@ -79,6 +79,11 @@ public class HeaderRecycleAdapter<T, H> extends RecyclerView.Adapter<HeaderRecyc
         return true;
     }
 
+    public boolean changeOneNoteContent(int changedNotePosition, List<T> l) {
+        mList = l;
+        notifyItemChanged(changedNotePosition);
+        return true;
+    }
     /**
      * 设置或者更新adapter的option
      *

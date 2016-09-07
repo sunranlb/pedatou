@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
             if (str.equals("1")) { // added
                 addNewFromDB();
             } else if (str.equals("2")) { //change one content
-//                changeOneNoteContent();
+                changeOneNoteContent();
             } else if (str.equals("3")) { //change content but has the same time
                 int toDeleteId = Integer.parseInt(bundle.getString("toDelete"));
 //                rvAdapter.removeById(toDeleteId);
@@ -198,18 +198,6 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-//    private void changeOneNoteContent() {
-//        List<Note> tmp = dao.findAll();
-//        List<Note> adapterDataList = rvAdapter.getDataList();
-//        int i = 0, s = adapterDataList.size();
-//        for (; i < s; ++i) {
-//            if (!tmp.get(i).getContent().equals(adapterDataList.get(i).getContent())) {
-//                break;
-//            }
-//        }
-//        if (i != s) rvAdapter.changeOneNoteContent(i, tmp.get(i).getContent());
-//    }
-
     private void initToolbar() {
         toolbarTitle.setText("pedatou");
         setSupportActionBar(toolbar);
@@ -226,6 +214,30 @@ public class MainActivity extends AppCompatActivity {
         }
         return dbList.get(i);
     }
+
+    private void changeOneNoteContent() {
+        List<Note> tmp = dao.findAll();
+        int groupId = 0, childId = 0, pos = 0, tmpI = 0;
+        int groupSize = mGroupList.size(), childSize;
+        for (; groupId < groupSize; ++groupId) {
+            List<Note> adapterGroupList = mGroupList.get(groupId);
+            childSize = adapterGroupList.size();
+            childId = 0;
+            for (; childId < childSize; ++childId) {
+                if (!(tmp.get(tmpI).getContent().equals(adapterGroupList.get(childId).getContent
+                        ()))) {
+                    pos++;
+                    adapterGroupList.get(childId).setContent(tmp.get(tmpI).getContent());
+                    mHeaderRVAdapter.changeOneNoteContent(pos, tmp);
+                    return;
+                }
+                pos++;
+                tmpI++;
+            }
+            pos++;
+        }
+    }
+
     private void addNewFromDB() {
         List<Note> daoList = dao.findAll();
         List<Note> adapterList = mHeaderRVAdapter.getList();
