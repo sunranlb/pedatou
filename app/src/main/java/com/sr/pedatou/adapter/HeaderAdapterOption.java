@@ -79,7 +79,11 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
         ImageView iv_header = holder.getView(R.id.line_header);
         if (tv_header != null) {
             tv_header.setTypeface(t);
-            tv_header.setText(header.toString());
+            if (header == null) {
+                tv_header.setText("");
+            } else {
+                tv_header.setText(header.toString());
+            }
         }
         switch (groupId) {
             case 0:

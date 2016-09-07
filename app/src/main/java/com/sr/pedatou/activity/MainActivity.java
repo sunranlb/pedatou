@@ -171,13 +171,32 @@ public class MainActivity extends AppCompatActivity {
                 changeOneNoteContent();
             } else if (str.equals("3")) { //change content but has the same time
                 int toDeleteId = Integer.parseInt(bundle.getString("toDelete"));
-//                rvAdapter.removeById(toDeleteId);
-//                changeOneNoteContent();
+                    removeOneNoteById(toDeleteId);
+                    changeOneNoteContent();
             } else if (str.equals("4")) { // change content but has new time
                 int toDeleteId = Integer.parseInt(bundle.getString("toDelete"));
 //                rvAdapter.removeById(toDeleteId);
 //                addNewFromDB();
             }
+        }
+    }
+
+    private void removeOneNoteById(int toDeleteId) {
+        int groupId = 0, childId = 0, pos = 0;
+        int groupSize = mGroupList.size(), childSize;
+        for (; groupId < groupSize; ++groupId) {
+            List<Note> adapterGroupList = mGroupList.get(groupId);
+            childSize = adapterGroupList.size();
+            childId = 0;
+            for (; childId < childSize; ++childId) {
+                if (adapterGroupList.get(childId).getId() == toDeleteId) {
+                    pos++;
+                    mHeaderRVAdapter.remove(groupId, childId, pos, adapterGroupList.get(childId));
+                    return;
+                }
+                pos++;
+            }
+            pos++;
         }
     }
 
