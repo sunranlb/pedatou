@@ -171,12 +171,12 @@ public class MainActivity extends AppCompatActivity {
                 changeOneNoteContent();
             } else if (str.equals("3")) { //change content but has the same time
                 int toDeleteId = Integer.parseInt(bundle.getString("toDelete"));
-                    removeOneNoteById(toDeleteId);
-                    changeOneNoteContent();
+                removeOneNoteById(toDeleteId);
+                changeOneNoteContent();
             } else if (str.equals("4")) { // change content but has new time
                 int toDeleteId = Integer.parseInt(bundle.getString("toDelete"));
-//                rvAdapter.removeById(toDeleteId);
-//                addNewFromDB();
+                removeOneNoteById(toDeleteId);
+                addNewFromDB();
             }
         }
     }
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
     private Note findNewNote(List<Note> dbList, List<Note> adapterList) {
         Note addedNote;
         int adapterDatalistSize = adapterList.size(), i = 0;
-        for(; i < adapterDatalistSize; ++i) {
+        for (; i < adapterDatalistSize; ++i) {
             if (!(dbList.get(i).getTime().equals(adapterList.get(i).getTime()))) {
                 addedNote = dbList.get(i);
                 return addedNote;
