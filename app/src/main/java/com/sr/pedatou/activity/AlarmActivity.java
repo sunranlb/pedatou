@@ -206,7 +206,7 @@ public class AlarmActivity extends Activity implements View.OnClickListener {
         PendingIntent pi = PendingIntent.getActivity(this, id, i,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         n = new Notification.Builder(this)
-                .setSmallIcon(R.drawable.red_cross24)
+                .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setContentIntent(pi)
