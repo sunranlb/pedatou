@@ -135,9 +135,6 @@ public class MainActivity extends AppCompatActivity {
         initToolbar();
         dao = new NoteDAO(MainActivity.this);
 
-
-        startIntroAnimation();
-
     }
 
     @Override
@@ -149,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
             isBindService = true;
         }
         super.onStart();
+        startIntroAnimation();
     }
 
     @Override
