@@ -638,32 +638,6 @@ public class AddActivity extends AppCompatActivity {
         gl.addView(addUsualBtn);
     }
 
-    // private void setNumberPickerTextSize(ViewGroup viewGroup) {
-    // List<NumberPicker> npList = findNumberPicker(viewGroup);
-    // if (null != npList) {
-    // for (NumberPicker np : npList) {
-    // EditText et = findEditText(np);
-    // et.setFocusable(false);
-    // et.setGravity(Gravity.CENTER);
-    // et.setTextSize(screenWidth / 25);
-    //
-    // }
-    // }
-    // }
-    //
-    // private EditText findEditText(NumberPicker np) {
-    // if (null != np) {
-    // for (int i = 0; i < np.getChildCount(); i++) {
-    // View child = np.getChildAt(i);
-    //
-    // if (child instanceof EditText) {
-    // return (EditText) child;
-    // }
-    // }
-    // }
-    //
-    // return null;
-    // }
 
     private void resizeTimePicker(FrameLayout tp) {
         List<NumberPicker> npList = findNumberPicker(tp);

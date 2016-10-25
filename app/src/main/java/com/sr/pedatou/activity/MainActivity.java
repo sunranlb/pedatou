@@ -17,10 +17,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sr.pedatou.R;
 import com.sr.pedatou.adapter.HeaderAdapterOption;
@@ -50,6 +54,8 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
     static final public String TAG = "MA";
     private static boolean isBindService = false;
+    private static int screenWidth = 0, screenHeight = 0;
+    private static float screenDensity = 0;
     @BindView(R.id.rv)
     RecyclerView rv;
     @BindView(R.id.main_activity_toolbar)
@@ -58,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     TextView toolbarTitle;
     @BindView(R.id.toolbar_add_btn)
     ImageButton toolbarAddBtn;
+    @BindView(R.id.left_drawer)
+    RelativeLayout leftDrawer;
     private HeaderRecycleAdapter mHeaderRVAdapter = null;
     private StickHeaderItemDecoration mStickDecoration = null;
     private RVAdapter rvAdapter;
@@ -132,9 +140,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        windowInit();
+        initSize();
         initToolbar();
         dao = new NoteDAO(MainActivity.this);
 
+    }
+
+    private void windowInit() {
+        WindowManager wm = this.getWindowManager();
+        screenWidth = wm.getDefaultDisplay().getWidth();
+        screenHeight = wm.getDefaultDisplay().getHeight();
+        DisplayMetrics metric = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(metric);
+        screenDensity = metric.density;
+    }
+
+    private void initSize() {
     }
 
     @Override
