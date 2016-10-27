@@ -20,8 +20,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -157,6 +159,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initSize() {
+        ViewGroup.LayoutParams l = leftDrawer.getLayoutParams();
+        l.width = screenWidth / 3 * 2;
+        leftDrawer.setLayoutParams(l);
     }
 
     @Override
