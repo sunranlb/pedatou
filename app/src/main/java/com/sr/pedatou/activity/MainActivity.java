@@ -19,9 +19,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -46,10 +50,13 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 
 //import com.sr.pedatou.adapter.RVAdapter;
 
@@ -68,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     ImageButton toolbarAddBtn;
     @BindView(R.id.left_drawer)
     RelativeLayout leftDrawer;
+    @BindView(R.id.left_drawer_add)
+    Button leftDrawerAdd;
     private HeaderRecycleAdapter mHeaderRVAdapter = null;
     private StickHeaderItemDecoration mStickDecoration = null;
     private RVAdapter rvAdapter;
@@ -144,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         windowInit();
         initSize();
+        leftDrawerAdd.setOnTouchListener(addListener);
         initToolbar();
         dao = new NoteDAO(MainActivity.this);
 
@@ -440,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
 //        return true;
 //    }
 
-    @OnClick({R.id.toolbar_add_btn})
+    @OnClick({R.id.toolbar_add_btn, R.id.left_drawer_add})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.toolbar_add_btn:
@@ -448,7 +458,39 @@ public class MainActivity extends AppCompatActivity {
                 i.setClass(MainActivity.this, AddActivity.class);
                 startActivityForResult(i, BIND_AUTO_CREATE);
                 break;
+            case R.id.left_drawer_add:
+                System.out.println("onClick");
+                break;
         }
     }
 
+    private View.OnTouchListener addListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    System.out.println("onTouch-down");
+                case MotionEvent.ACTION_UP:
+                    System.out.println("onTouch-up");
+                    return true;
+            }
+            return true;
+        }
+    };
+//    @OnTouch({R.id.left_drawer_add})
+//    public boolean onTouch(View v, MotionEvent event) {
+//        switch (v.getId()) {
+//            case R.id.left_drawer_add:
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        System.out.println("onTouch-down");
+//                    case MotionEvent.ACTION_UP:
+//                        System.out.println("onTouch-up");
+//                        return true;
+//                }
+//                break;
+//        }
+//
+//        return false;
+//    }
 }
