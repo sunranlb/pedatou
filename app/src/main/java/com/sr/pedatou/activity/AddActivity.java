@@ -438,8 +438,11 @@ public class AddActivity extends AppCompatActivity {
 
     private boolean isAheadTime(String time) {
         Calendar cal = Calendar.getInstance();
-        String s = "" + cal.get(Calendar.YEAR) + cal.get(Calendar.MONTH) + cal.get(Calendar
-                .DAY_OF_MONTH) + cal.get(Calendar.HOUR_OF_DAY) + cal.get(Calendar.MINUTE);
+        String s = "" + cal.get(Calendar.YEAR) +
+                (cal.get(Calendar.MONTH) < 10 ? "0" : "") + cal.get(Calendar.MONTH) +
+                (cal.get(Calendar.DAY_OF_MONTH) < 10 ? "0" : "") + cal.get(Calendar.DAY_OF_MONTH) +
+                (cal.get(Calendar.HOUR_OF_DAY) < 10 ? "0" : "") + cal.get(Calendar.HOUR_OF_DAY) +
+                (cal.get(Calendar.MINUTE) < 10 ? "0" : "") + cal.get(Calendar.MINUTE);
 //        System.out.println("ssssssssss = " + s);
         if (Long.parseLong(s) - Long.parseLong(time) >= 0l) {
 //            System.out.println("before : " + (Long.parseLong(s) - Long.parseLong(time)));
