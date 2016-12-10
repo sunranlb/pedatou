@@ -204,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         if (str != null) {
             if (str.equals("1")) { // added
                 addNewFromDB();
+                Toast.makeText(this, "Added!", Toast.LENGTH_SHORT).show();
             } else if (str.equals("2")) { //change one content
                 changeOneNoteContent();
             } else if (str.equals("3")) { //change content but has the same time
