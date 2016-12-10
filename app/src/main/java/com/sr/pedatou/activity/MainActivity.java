@@ -130,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
                     alarmService.deleteAlarm(n);
                     dao.detele(n.getId());
                     mHeaderRVAdapter.remove(groupId, childId, position, n);
+                    Toast.makeText(MainActivity.this, "Deleted note at " + Tools.transDB2RV(n
+                            .getTime()), Toast.LENGTH_SHORT).show();
                 }
             });
             builder.show();
