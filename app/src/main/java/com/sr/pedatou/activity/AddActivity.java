@@ -36,6 +36,7 @@ import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.sr.pedatou.R;
 import com.sr.pedatou.dao.NoteDAO;
@@ -435,6 +436,19 @@ public class AddActivity extends AppCompatActivity {
                 .setDescendantFocusability(TimePicker.FOCUS_BLOCK_DESCENDANTS);
     }
 
+    private boolean isAheadTime(String time) {
+        Calendar cal = Calendar.getInstance();
+        String s = "" + cal.get(Calendar.YEAR) + cal.get(Calendar.MONTH) + cal.get(Calendar
+                .DAY_OF_MONTH) + cal.get(Calendar.HOUR_OF_DAY) + cal.get(Calendar.MINUTE);
+//        System.out.println("ssssssssss = " + s);
+        if (Long.parseLong(s) - Long.parseLong(time) >= 0l) {
+//            System.out.println("before : " + (Long.parseLong(s) - Long.parseLong(time)));
+            return false;
+        } else {
+//            System.out.println("after : " + (Long.parseLong(s) - Long.parseLong(time)));
+            return true;
+        }
+    }
     private void initToolBar() {
         toolbar.setTitle("Add Note");
         setSupportActionBar(toolbar);
@@ -444,22 +458,28 @@ public class AddActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 getTime();
                 String transTime = transTime2DB();
-                if (isToChangeNote) { //用户点击RV项进入的AddActivity
-                    if (noteToChange.getTime().equals(transTime)) { //用户并没有修改时间，只修改了内容
-                        changeContentAndFinish(transTime);
-                    } else { //用户修改了时间
-                        if (dao.findByTime(transTime) != null) {
-                            //如果用户修改的时间已经有事件项目了，由于需要保证数据库时间的唯一性
-                            //需要提醒用户已经有该时间的时间，弹出提示框询问是否添加
+
+                if (isAheadTime(transTime)){
+                    if (isToChangeNote) { //用户点击RV项进入的AddActivity
+                        if (noteToChange.getTime().equals(transTime)) { //用户并没有修改时间，只修改了内容
+                            changeContentAndFinish(transTime);
+                        } else { //用户修改了时间
+                            if (dao.findByTime(transTime) != null) {
+                                //如果用户修改的时间已经有事件项目了，由于需要保证数据库时间的唯一性
+                                //需要提醒用户已经有该时间的时间，弹出提示框询问是否添加
+                                showHasSameTimeDialog(transTime);
+                            } else //如果用户修改的时间在数据库中并没有
+                                save2DBAndFinish(transTime);
+                        }
+                    } else { //用户点击添加按钮进入的AddActivity
+                        if (dao.findByTime(transTime) != null) { //如果添加的新事件的时间在数据库中已经有了
                             showHasSameTimeDialog(transTime);
-                        } else //如果用户修改的时间在数据库中并没有
+                        } else
                             save2DBAndFinish(transTime);
                     }
-                } else { //用户点击添加按钮进入的AddActivity
-                    if (dao.findByTime(transTime) != null) { //如果添加的新事件的时间在数据库中已经有了
-                        showHasSameTimeDialog(transTime);
-                    } else
-                        save2DBAndFinish(transTime);
+                } else {
+                    Toast.makeText(AddActivity.this, "Note's time should after now!", Toast
+                            .LENGTH_LONG).show();
                 }
                 return false;
             }
