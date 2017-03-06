@@ -85,8 +85,9 @@ public class MainActivity extends AppCompatActivity {
     private Typeface noteTypeface;
     private Typeface headerTypeface;
     private AlarmService alarmService;
-    private List<List<Note>> mGroupList = null;
-    private Map<Integer, String> mHeaderMap = new ArrayMap<Integer, String>();
+    private List<List<Note>> mGroupList;
+    private static Map<Integer, String> mHeaderMap;
+    private int todayPosition;
     private ServiceConnection alarmServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -101,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
             isBindService = false;
         }
     };
-    private int todayPosition;
     private HeaderRecycleViewHolder.OnItemClickListener onNoteClickListener = new
             HeaderRecycleViewHolder.OnItemClickListener() {
 
@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
         List<Note> adapterList = mHeaderRVAdapter.getList();
         Note addedNote = findNewNote(daoList, adapterList);
 
-        setGroupListAndHeaderMap(daoList);
+//        setGroupListAndHeaderMap(daoList);
         List<List<Note>> adapterDatalist = mHeaderRVAdapter.getGroupList();
 
         int groupId = 0, childId = 0, pos = 0;
@@ -328,7 +328,17 @@ public class MainActivity extends AppCompatActivity {
         noteTypeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
         headerTypeface = Typeface.createFromAsset(this.getAssets(), "fonts/Pacifico.ttf");
         mGroupList = new LinkedList<List<Note>>();
-        mHeaderMap = new ArrayMap<Integer, String>();
+
+        if (mHeaderMap == null) {
+            mHeaderMap = new ArrayMap<Integer, String>();
+            System.out.println("is Empty!!");
+            mHeaderMap.put(0, "History");
+            mHeaderMap.put(1, "Today");
+            mHeaderMap.put(2, "Tomorrow");
+            mHeaderMap.put(3, "Within One Week");
+            mHeaderMap.put(4, "Within Two Weeks");
+            mHeaderMap.put(5, "Farther Future");
+        }
 
         setGroupListAndHeaderMap(dataList);
 
@@ -337,16 +347,18 @@ public class MainActivity extends AppCompatActivity {
 //            System.out.println(mGroupList.get(i));
 //        }
 
-        mHeaderRVAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
-                (false, true), mGroupList, mHeaderMap, dataList, noteTypeface, headerTypeface,
-                onNoteClickListener);
-        layoutManager = new MyLinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rv.setLayoutManager(layoutManager);
-        rv.setAdapter(mHeaderRVAdapter);
-        mStickDecoration = new StickHeaderItemDecoration(mHeaderRVAdapter);
-        rv.addItemDecoration(mStickDecoration);
-        rv.setItemAnimator(new MyItemAnimator());
+        if (mHeaderRVAdapter == null){
+            mHeaderRVAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
+                    (false, true), mGroupList, mHeaderMap, dataList, noteTypeface, headerTypeface,
+                    onNoteClickListener);
+            layoutManager = new MyLinearLayoutManager(this);
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            rv.setLayoutManager(layoutManager);
+            rv.setAdapter(mHeaderRVAdapter);
+            mStickDecoration = new StickHeaderItemDecoration(mHeaderRVAdapter);
+            rv.addItemDecoration(mStickDecoration);
+            rv.setItemAnimator(new MyItemAnimator());
+        }
         rv.scrollToPosition(todayPosition);
 //        oldset(dataList);
 
@@ -366,18 +378,10 @@ public class MainActivity extends AppCompatActivity {
 
     // 设置列表数组和header数组，并确定today的位置
     private void setGroupListAndHeaderMap(List<Note> dataList) {
-        mHeaderMap.clear();
         mGroupList.clear();
         Calendar cal = Calendar.getInstance();
         cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
                 0, 0, 0);
-
-        mHeaderMap.put(0, "History");
-        mHeaderMap.put(1, "Today");
-        mHeaderMap.put(2, "Tomorrow");
-        mHeaderMap.put(3, "Within One Week");
-        mHeaderMap.put(4, "Within Two Weeks");
-        mHeaderMap.put(5, "Farther Future");
 
         int listSize = dataList.size();
         int i = 0;
