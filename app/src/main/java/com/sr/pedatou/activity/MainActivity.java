@@ -344,9 +344,11 @@ public class MainActivity extends AppCompatActivity {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv.setLayoutManager(layoutManager);
         rv.setAdapter(mHeaderRVAdapter);
-        mStickDecoration = new StickHeaderItemDecoration(mHeaderRVAdapter);
-        rv.addItemDecoration(mStickDecoration);
-        rv.setItemAnimator(new MyItemAnimator());
+        if (mStickDecoration == null) {
+            mStickDecoration = new StickHeaderItemDecoration(mHeaderRVAdapter);
+            rv.addItemDecoration(mStickDecoration);
+            rv.setItemAnimator(new MyItemAnimator());
+        }
         rv.scrollToPosition(todayPosition);
 //        oldset(dataList);
 
