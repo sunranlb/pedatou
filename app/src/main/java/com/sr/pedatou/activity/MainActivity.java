@@ -347,14 +347,14 @@ public class MainActivity extends AppCompatActivity {
 //            System.out.println(mGroupList.get(i));
 //        }
 
-        if (mHeaderRVAdapter == null){
-            mHeaderRVAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
-                    (false, true), mGroupList, mHeaderMap, dataList, noteTypeface, headerTypeface,
-                    onNoteClickListener);
-            layoutManager = new MyLinearLayoutManager(this);
-            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            rv.setLayoutManager(layoutManager);
-            rv.setAdapter(mHeaderRVAdapter);
+        mHeaderRVAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
+                (false, true), mGroupList, mHeaderMap, dataList, noteTypeface, headerTypeface,
+                onNoteClickListener);
+        layoutManager = new MyLinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rv.setLayoutManager(layoutManager);
+        rv.setAdapter(mHeaderRVAdapter);
+        if (mStickDecoration == null) {
             mStickDecoration = new StickHeaderItemDecoration(mHeaderRVAdapter);
             rv.addItemDecoration(mStickDecoration);
             rv.setItemAnimator(new MyItemAnimator());
