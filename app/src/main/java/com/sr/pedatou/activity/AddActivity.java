@@ -625,8 +625,10 @@ public class AddActivity extends AppCompatActivity {
         Button nbt = new Button(AddActivity.this);
         nbt.setText(n);
         nbt.setSingleLine();
-        nbt.setWidth(usualBtnWidth);
-        nbt.setHeight(usualBtnHeight);
+        LayoutParams params = new LayoutParams(
+                usualBtnWidth, usualBtnHeight);
+        params.setMargins(0, 0, 0, 0);
+        nbt.setLayoutParams(params);
         nbt.setOnTouchListener(rmRCOTL);
         nbt.setOnLongClickListener(new OnLongClickListener() {
             @Override
