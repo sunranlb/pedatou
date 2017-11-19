@@ -102,10 +102,9 @@ public class MainActivity extends AppCompatActivity {
             isBindService = false;
         }
     };
+
     private HeaderRecycleViewHolder.OnItemClickListener onNoteClickListener = new
             HeaderRecycleViewHolder.OnItemClickListener() {
-
-
         @Override
         public void onItemClick(int groupId, int childId, int position, int viewId, boolean
                 isHeader, View rootView, HeaderRecycleViewHolder holder) {
@@ -269,7 +268,7 @@ public class MainActivity extends AppCompatActivity {
                 return addedNote;
             }
         }
-        return dbList.get(i);
+        return i == adapterDatalistSize ? null : dbList.get(i);
     }
 
     private void changeOneNoteContent() {
@@ -299,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
         List<Note> daoList = dao.findAll();
         List<Note> adapterList = mHeaderRVAdapter.getList();
         Note addedNote = findNewNote(daoList, adapterList);
+        if (addedNote == null) return;
 
 //        setGroupListAndHeaderMap(daoList);
         List<List<Note>> adapterDatalist = mHeaderRVAdapter.getGroupList();

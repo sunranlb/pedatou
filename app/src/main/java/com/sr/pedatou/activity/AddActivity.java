@@ -59,6 +59,8 @@ import static com.sr.pedatou.util.Tools.transDB2RV;
 
 public class AddActivity extends AppCompatActivity {
     private static final String TAG = "AddActivity";
+    // 是否允许设置的时间在此之前
+    private static final boolean ALLOW_HISTORY_TIME = true;
     private static int screenWidth = 0, screenHeight = 0;
     private static float screenDensity = 0;
     private static int usualBtnWidth = 0, usualBtnHeight = 0;
@@ -461,8 +463,8 @@ public class AddActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 getTime();
                 String transTime = transTime2DB();
-
-                if (isAheadTime(transTime)){
+                // 如果允许时间为历史时间，则不需要判断时间是否合法
+                if (ALLOW_HISTORY_TIME || isAheadTime(transTime)){
                     if (isToChangeNote) { //用户点击RV项进入的AddActivity
                         if (noteToChange.getTime().equals(transTime)) { //用户并没有修改时间，只修改了内容
                             changeContentAndFinish(transTime);
