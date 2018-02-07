@@ -446,7 +446,7 @@ public class AddActivity extends AppCompatActivity {
                 (cal.get(Calendar.HOUR_OF_DAY) < 10 ? "0" : "") + cal.get(Calendar.HOUR_OF_DAY) +
                 (cal.get(Calendar.MINUTE) < 10 ? "0" : "") + cal.get(Calendar.MINUTE);
 //        System.out.println("ssssssssss = " + s);
-        if (Long.parseLong(s) - Long.parseLong(time) >= 0l) {
+        if (Long.parseLong(s) - Long.parseLong(time) > 0l) {
 //            System.out.println("before : " + (Long.parseLong(s) - Long.parseLong(time)));
             return false;
         } else {
