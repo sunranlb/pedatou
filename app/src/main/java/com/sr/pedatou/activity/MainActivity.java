@@ -23,11 +23,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,13 +47,10 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 
 //import com.sr.pedatou.adapter.RVAdapter;
 
@@ -272,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeOneNoteContent() {
-        List<Note> tmp = dao.findAll();
+        List<Note> tmp = dao.getAll();
         int groupId = 0, childId = 0, pos = 0, tmpI = 0;
         int groupSize = mGroupList.size(), childSize;
         for (; groupId < groupSize; ++groupId) {
@@ -295,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addNewFromDB() {
-        List<Note> daoList = dao.findAll();
+        List<Note> daoList = dao.getAll();
         List<Note> adapterList = mHeaderRVAdapter.getList();
         Note addedNote = findNewNote(daoList, adapterList);
         if (addedNote == null) return;
@@ -324,28 +318,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRV() {
-        List<Note> dataList = dao.findAll();
+        Calendar cal = Calendar.getInstance();
+        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
+                0, 0, 0);
+
+        List<Note> dataList = dao.getFromDay(cal);
         noteTypeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
         headerTypeface = Typeface.createFromAsset(this.getAssets(), "fonts/Pacifico.ttf");
-        mGroupList = new LinkedList<List<Note>>();
+        mGroupList = new LinkedList<>();
 
         if (mHeaderMap == null) {
-            mHeaderMap = new ArrayMap<Integer, String>();
-            System.out.println("is Empty!!");
-            mHeaderMap.put(0, "History");
-            mHeaderMap.put(1, "Today");
-            mHeaderMap.put(2, "Tomorrow");
-            mHeaderMap.put(3, "Within One Week");
-            mHeaderMap.put(4, "Within Two Weeks");
-            mHeaderMap.put(5, "Farther Future");
+            mHeaderMap = new ArrayMap<>();
+//            System.out.println("is Empty!!");
+//            mHeaderMap.put(0, "History");
+            mHeaderMap.put(0, "Today");
+            mHeaderMap.put(1, "Tomorrow");
+            mHeaderMap.put(2, "Within One Week");
+            mHeaderMap.put(3, "Within Two Weeks");
+            mHeaderMap.put(4, "Farther Future");
         }
-
-        setGroupListAndHeaderMap(dataList);
-
-//        for (int i = 0; i < mGroupList.size(); ++i) {
-//            System.out.println(mHeaderMap.get(i));
-//            System.out.println(mGroupList.get(i));
-//        }
+        setGroupListAndHeaderMap(dataList, cal);
 
         mHeaderRVAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
                 (false, true), mGroupList, mHeaderMap, dataList, noteTypeface, headerTypeface,
@@ -377,55 +369,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // 设置列表数组和header数组，并确定today的位置
-    private void setGroupListAndHeaderMap(List<Note> dataList) {
+    private void setGroupListAndHeaderMap(List<Note> dataList, Calendar cal) {
         mGroupList.clear();
-        Calendar cal = Calendar.getInstance();
-        cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
-                0, 0, 0);
 
         int listSize = dataList.size();
         int i = 0;
         todayPosition = 0;
-        List<Note> historyList = new ArrayList<Note>();
+//        List<Note> historyList = new ArrayList<Note>();
         List<Note> todayList = new ArrayList<Note>();
         List<Note> tomorrowList = new ArrayList<Note>();
         List<Note> oneweekList = new ArrayList<Note>();
         List<Note> twoweekList = new ArrayList<Note>();
         List<Note> fartherfutureList = new ArrayList<Note>();
-        for (; i < listSize; ++i) {
-            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
-            if (t.compareTo(cal) >= 0) break;
-            historyList.add(dataList.get(i));
-        }
+//        for (; i < listSize; ++i) {
+//            Calendar t = Tools.dbToCalendarAccurateToDay(dataList.get(i).getTime());
+//            if (t.compareTo(cal) >= 0) break;
+//            historyList.add(dataList.get(i));
+//        }
         todayPosition += i + 1;
         cal.add(Calendar.DAY_OF_MONTH, 1);
         for (; i < listSize; ++i) {
-            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
+            Calendar t = Tools.dbToCalendarAccurateToDay(dataList.get(i).getTime());
             if (t.compareTo(cal) >= 0) break;
             todayList.add(dataList.get(i));
         }
         cal.add(Calendar.DAY_OF_MONTH, 1);
         for (; i < listSize; ++i) {
-            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
+            Calendar t = Tools.dbToCalendarAccurateToDay(dataList.get(i).getTime());
             if (t.compareTo(cal) >= 0) break;
             tomorrowList.add(dataList.get(i));
         }
         cal.add(Calendar.DAY_OF_MONTH, 5);
         for (; i < listSize; ++i) {
-            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
+            Calendar t = Tools.dbToCalendarAccurateToDay(dataList.get(i).getTime());
             if (t.compareTo(cal) >= 0) break;
             oneweekList.add(dataList.get(i));
         }
         cal.add(Calendar.DAY_OF_MONTH, 7);
         for (; i < listSize; ++i) {
-            Calendar t = Tools.dbToCalendar(dataList.get(i).getTime());
+            Calendar t = Tools.dbToCalendarAccurateToDay(dataList.get(i).getTime());
             if (t.compareTo(cal) >= 0) break;
             twoweekList.add(dataList.get(i));
         }
         for (; i < listSize; ++i) {
             fartherfutureList.add(dataList.get(i));
         }
-        mGroupList.add(historyList);
+//        mGroupList.add(historyList);
         mGroupList.add(todayList);
         mGroupList.add(tomorrowList);
         mGroupList.add(oneweekList);
