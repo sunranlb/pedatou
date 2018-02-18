@@ -26,7 +26,7 @@ public class Tools {
         return month + "/" + day + " " + hour + ":" + min;
     }
 
-    public static Calendar dbToCalendar(String timeFromDB) {
+    public static Calendar dbToCalendarAccurateToDay(String timeFromDB) {
 //        System.out.println(timeFromDB);
 //        System.out.println(timeFromDB.substring(0,3));
         Calendar r = Calendar.getInstance();
@@ -35,6 +35,21 @@ public class Tools {
                 Integer.parseInt(timeFromDB.substring(6, 8)),
                 0, 0, 0);
         return r;
+    }
 
+    public static String calendarToDb(Calendar cal) {
+        StringBuilder sb = new StringBuilder(12);
+        sb.append(cal.get(Calendar.YEAR));
+        sb.append(cal.get(Calendar.MONTH));
+        sb.append(cal.get(Calendar.DAY_OF_MONTH));
+        sb.append(cal.get(Calendar.HOUR_OF_DAY));
+        sb.append(cal.get(Calendar.MINUTE));
+
+        Calendar r = Calendar.getInstance();
+        r.set(Integer.parseInt(timeFromDB.substring(0, 4)),
+                Integer.parseInt(timeFromDB.substring(4, 6)),
+                Integer.parseInt(timeFromDB.substring(6, 8)),
+                0, 0, 0);
+        return r;
     }
 }

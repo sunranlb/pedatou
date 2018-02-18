@@ -1,6 +1,7 @@
 package com.sr.pedatou.dao;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.content.Context;
@@ -71,7 +72,24 @@ public class NoteDAO {
         return null;
     }
 
-    public ArrayList<Note> findAll() {
+    public ArrayList<Note> getAll() {
+        ArrayList<Note> r = new ArrayList<Note>();
+        db = helper.getWritableDatabase();
+        try {
+            Cursor cursor = db.rawQuery("select * from note order by time", new String[]{});
+            while (cursor.moveToNext()) {
+                r.add(new Note(cursor.getInt(cursor.getColumnIndex("id")),
+                        cursor.getString(cursor.getColumnIndex("content")),
+                        cursor.getString(cursor.getColumnIndex("time"))));
+            }
+        } catch (SQLException e) {
+            Log.v(TAG, e.getMessage());
+        }
+
+        return r;
+    }
+
+    public ArrayList<Note> getFromDay(Calendar cal) {
         ArrayList<Note> r = new ArrayList<Note>();
         db = helper.getWritableDatabase();
         try {

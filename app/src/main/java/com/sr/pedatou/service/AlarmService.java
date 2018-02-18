@@ -1,24 +1,19 @@
 package com.sr.pedatou.service;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.sr.pedatou.activity.AlarmActivity;
-import com.sr.pedatou.activity.MainActivity;
 import com.sr.pedatou.dao.NoteDAO;
 import com.sr.pedatou.util.Note;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.util.Log;
 
 public class AlarmService extends Service {
     private final static String TAG = "AlarmService";
@@ -67,7 +62,7 @@ public class AlarmService extends Service {
     public void bootSet() {
 
         NoteDAO dao = new NoteDAO(this);
-        List<Note> allNotes = dao.findAll();
+        List<Note> allNotes = dao.getAll();
 
         int setBeginIndex = findFutureBeginIndex(allNotes);
 
