@@ -97,37 +97,40 @@ public class MainActivity extends AppCompatActivity {
 
     private HeaderRecycleViewHolder.OnItemClickListener onNoteClickListener = new
             HeaderRecycleViewHolder.OnItemClickListener() {
-        @Override
-        public void onItemClick(int groupId, int childId, int position, int viewId, boolean
-                isHeader, View rootView, HeaderRecycleViewHolder holder) {
-            Intent i = new Intent();
-            i.setClass(MainActivity.this, AddActivity.class);
-            Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
-            System.out.println("onItemClick: Note's id = " + n.getId());
-            i.putExtra("id", n.getId());
-            startActivityForResult(i, BIND_AUTO_CREATE);
-        }
-
-        @Override
-        public void onItemLongClick(final int groupId, final int childId, final int position, int
-                viewId, boolean isHeader, View rootView, HeaderRecycleViewHolder holder) {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle("Delete It???").setNegativeButton("CANCEL", null);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int which) {
+                @Override
+                public void onItemClick(int groupId, int childId, int position, int viewId, boolean
+                        isHeader, View rootView, HeaderRecycleViewHolder holder) {
+                    Intent i = new Intent();
+                    i.setClass(MainActivity.this, AddActivity.class);
                     Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
-                    alarmService.deleteAlarm(n);
-                    dao.detele(n.getId());
-                    mHeaderRVAdapter.remove(groupId, childId, position, n);
-                    Toast.makeText(MainActivity.this, "Deleted note at " + Tools.transDB2RV(n
-                            .getTime()), Toast.LENGTH_SHORT).show();
+                    System.out.println("onItemClick: Note's id = " + n.getId());
+                    i.putExtra("id", n.getId());
+                    startActivityForResult(i, BIND_AUTO_CREATE);
                 }
-            });
-            builder.show();
-        }
-    };
+
+                @Override
+                public void onItemLongClick(final int groupId, final int childId, final int
+                        position, int
+                                                    viewId, boolean isHeader, View rootView,
+                                            HeaderRecycleViewHolder holder) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("Delete It???").setNegativeButton("CANCEL", null);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            Note n = (Note) mHeaderRVAdapter.getItem(groupId, childId);
+                            alarmService.deleteAlarm(n);
+                            dao.detele(n.getId());
+                            mHeaderRVAdapter.remove(groupId, childId, position, n);
+                            Toast.makeText(MainActivity.this, "Deleted note at " + Tools
+                                    .transDB2RV(n
+                                            .getTime()), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    builder.show();
+                }
+            };
 
     @Override
     public void onStop() {
@@ -238,11 +241,11 @@ public class MainActivity extends AppCompatActivity {
         toolbarTitle.animate().translationY(0).setDuration(300).setStartDelay(300);
         toolbarAddBtn.animate().translationY(0).setDuration(300).setStartDelay(600).setListener
                 (new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                initRV();
-            }
-        }).start();
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        initRV();
+                    }
+                }).start();
     }
 
     private void initToolbar() {
@@ -337,8 +340,8 @@ public class MainActivity extends AppCompatActivity {
         setGroupListAndHeaderMap(dataList, cal);
 
         mHeaderRVAdapter = new HeaderRecycleAdapter<Note, String>(this, new HeaderAdapterOption
-                (false, true), mGroupList, mHeaderMap, dataList, noteTypeface, headerTypeface,
-                onNoteClickListener);
+                (false, true), mGroupList, mHeaderMap, dataList, noteTypeface,
+                headerTypeface, onNoteClickListener);
         layoutManager = new MyLinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv.setLayoutManager(layoutManager);
@@ -348,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
             rv.addItemDecoration(mStickDecoration);
             rv.setItemAnimator(new MyItemAnimator());
         }
-        rv.scrollToPosition(todayPosition);
+//        rv.scrollToPosition(todayPosition);
 //        oldset(dataList);
 
     }
