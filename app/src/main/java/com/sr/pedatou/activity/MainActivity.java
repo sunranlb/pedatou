@@ -52,8 +52,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-//import com.sr.pedatou.adapter.RVAdapter;
-
 public class MainActivity extends AppCompatActivity {
     static final public String TAG = "MA";
     private static boolean isBindService = false;
@@ -232,7 +230,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startIntroAnimation() {
-
         int actionbarSize = (int) (56 * Resources.getSystem().getDisplayMetrics().density);
         toolbar.setTranslationY(-actionbarSize);
         toolbarTitle.setTranslationY(-actionbarSize);

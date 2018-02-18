@@ -92,8 +92,11 @@ public class NoteDAO {
     public ArrayList<Note> getFromDay(Calendar cal) {
         ArrayList<Note> r = new ArrayList<Note>();
         db = helper.getWritableDatabase();
+        String dbTime = Tools.calendarToDb(cal);
         try {
-            Cursor cursor = db.rawQuery("select * from note order by time", new String[]{});
+            Cursor cursor = db.rawQuery(
+                    "select * from note where time >= " + dbTime + " order by time",
+                    new String[]{});
             while (cursor.moveToNext()) {
                 r.add(new Note(cursor.getInt(cursor.getColumnIndex("id")),
                         cursor.getString(cursor.getColumnIndex("content")),
