@@ -87,18 +87,21 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
         }
         switch (groupId) {
             case 0:
-                iv_header.setImageResource(R.drawable.header_line_today);
+                iv_header.setImageResource(R.drawable.header_line_history);
                 break;
             case 1:
-                iv_header.setImageResource(R.drawable.header_line_tomorror);
+                iv_header.setImageResource(R.drawable.header_line_today);
                 break;
             case 2:
-                iv_header.setImageResource(R.drawable.header_line_within_one_week);
+                iv_header.setImageResource(R.drawable.header_line_tomorror);
                 break;
             case 3:
-                iv_header.setImageResource(R.drawable.header_line_within_two_weeks);
+                iv_header.setImageResource(R.drawable.header_line_within_one_week);
                 break;
             case 4:
+                iv_header.setImageResource(R.drawable.header_line_within_two_weeks);
+                break;
+            case 5:
                 iv_header.setImageResource(R.drawable.header_line_farther_future);
                 break;
             default:
@@ -118,30 +121,29 @@ public class HeaderAdapterOption implements HeaderRecycleAdapter.IHeaderAdapterO
         if (tv_content != null) {
             tv_content.setTypeface(t);
             tv_content.setText(itemData.getContent());
-//            if (groupId == 0) tv_content.setTextColor(Color.GRAY);
-//            else tv_content.setTextColor(Color.BLACK);
-            tv_content.setTextColor(Color.BLACK);
+            if (groupId == 0) tv_content.setTextColor(Color.GRAY);
+            else tv_content.setTextColor(Color.BLACK);
+//            tv_content.setTextColor(Color.BLACK);
         }
 
         if (tv_time != null) {
             tv_time.setTypeface(t);
             tv_time.setText(Tools.transDB2RV(itemData.getTime()));
-//            if (groupId == 0) tv_time.setTextColor(Color.GRAY);
-//            else tv_time.setTextColor(Color.BLACK);
-            tv_time.setTextColor(Color.BLACK);
+            if (groupId == 0) tv_time.setTextColor(Color.GRAY);
+            else tv_time.setTextColor(Color.BLACK);
+//            tv_time.setTextColor(Color.BLACK);
         }
         switch (groupId) {
-
-            case 0:
+            case 1:
                 rootView.setCardBackgroundColor(Color.parseColor("#f44336"));
                 break;
-            case 1:
+            case 2:
                 rootView.setCardBackgroundColor(Color.parseColor("#ef9a9a"));
                 break;
-            case 2:
+            case 3:
                 rootView.setCardBackgroundColor(Color.parseColor("#ffcdd2"));
                 break;
-            case 3:
+            case 4:
                 rootView.setCardBackgroundColor(Color.parseColor("#ffebee"));
                 break;
             default:

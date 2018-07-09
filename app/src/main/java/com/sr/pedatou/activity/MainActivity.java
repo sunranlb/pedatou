@@ -321,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
                 0, 0, 0);
+        cal.add(Calendar.DAY_OF_MONTH, -1);
 
         List<Note> dataList = dao.getFromDay(cal);
         noteTypeface = Typeface.createFromAsset(this.getAssets(), "fonts/Roboto-Light.ttf");
@@ -331,11 +332,12 @@ public class MainActivity extends AppCompatActivity {
             mHeaderMap = new ArrayMap<>();
 //            System.out.println("is Empty!!");
 //            mHeaderMap.put(0, "History");
-            mHeaderMap.put(0, "Today");
-            mHeaderMap.put(1, "Tomorrow");
-            mHeaderMap.put(2, "Within One Week");
-            mHeaderMap.put(3, "Within Two Weeks");
-            mHeaderMap.put(4, "Farther Future");
+            mHeaderMap.put(0, "Yesterday");
+            mHeaderMap.put(1, "Today");
+            mHeaderMap.put(2, "Tomorrow");
+            mHeaderMap.put(3, "Within One Week");
+            mHeaderMap.put(4, "Within Two Weeks");
+            mHeaderMap.put(5, "Farther Future");
         }
         setGroupListAndHeaderMap(dataList, cal);
 
@@ -351,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
             rv.addItemDecoration(mStickDecoration);
             rv.setItemAnimator(new MyItemAnimator());
         }
-//        rv.scrollToPosition(todayPosition);
+        rv.scrollToPosition(todayPosition);
 //        oldset(dataList);
 
     }
@@ -376,17 +378,24 @@ public class MainActivity extends AppCompatActivity {
         int i = 0;
         todayPosition = 0;
 //        List<Note> historyList = new ArrayList<Note>();
+        List<Note> yesterdayList = new ArrayList<Note>();
         List<Note> todayList = new ArrayList<Note>();
         List<Note> tomorrowList = new ArrayList<Note>();
         List<Note> oneweekList = new ArrayList<Note>();
         List<Note> twoweekList = new ArrayList<Note>();
         List<Note> fartherfutureList = new ArrayList<Note>();
-//        for (; i < listSize; ++i) {
-//            Calendar t = Tools.dbToCalendarAccurateToDay(dataList.get(i).getTime());
-//            if (t.compareTo(cal) >= 0) break;
-//            historyList.add(dataList.get(i));
-//        }
-        todayPosition += i + 1;
+
+        for (; i < listSize; ++i) {
+            Calendar t = Tools.dbToCalendarAccurateToDay(dataList.get(i).getTime());
+            if (t.compareTo(cal) >= 0) break;
+        }
+        todayPosition = i + 1;
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        for (; i < listSize; ++i) {
+            Calendar t = Tools.dbToCalendarAccurateToDay(dataList.get(i).getTime());
+            if (t.compareTo(cal) >= 0) break;
+            yesterdayList.add(dataList.get(i));
+        }
         cal.add(Calendar.DAY_OF_MONTH, 1);
         for (; i < listSize; ++i) {
             Calendar t = Tools.dbToCalendarAccurateToDay(dataList.get(i).getTime());
@@ -415,6 +424,7 @@ public class MainActivity extends AppCompatActivity {
             fartherfutureList.add(dataList.get(i));
         }
 //        mGroupList.add(historyList);
+        mGroupList.add(yesterdayList);
         mGroupList.add(todayList);
         mGroupList.add(tomorrowList);
         mGroupList.add(oneweekList);
